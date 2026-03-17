@@ -109,6 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">3.3.3</span> Lists</a></li>
   </ul></li>
   <li><a href="#data-classes" id="toc-data-classes" class="nav-link" data-scroll-target="#data-classes"><span class="header-section-number">3.4</span> Data Classes</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">3.5</span> Exercises</a></li>
   </ul></li>
   <li><a href="#functions-and-iteration" id="toc-functions-and-iteration" class="nav-link" data-scroll-target="#functions-and-iteration"><span class="header-section-number">4</span> Functions and Iteration</a>
   <ul class="collapse">
@@ -124,6 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#the-value-of-functional-programming" id="toc-the-value-of-functional-programming" class="nav-link" data-scroll-target="#the-value-of-functional-programming"><span class="header-section-number">4.3</span> The value of functional programming</a></li>
   <li><a href="#global-and-local-environments" id="toc-global-and-local-environments" class="nav-link" data-scroll-target="#global-and-local-environments"><span class="header-section-number">4.4</span> Global and local environments</a></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1"><span class="header-section-number">4.5</span> Exercises</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -655,8 +657,8 @@ length</code></pre>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-31988a45e597f40b7db9" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-31988a45e597f40b7db9">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Country":["Country A","Country B","Country C"],"GDP":[8000,30000,23500],"Population":[2000,5400,10000],"Continent":["South America","Europe","North America"]},"columns":[{"id":"Country","name":"Country","type":"character"},{"id":"GDP","name":"GDP","type":"numeric"},{"id":"Population","name":"Population","type":"numeric"},{"id":"Continent","name":"Continent","type":"character"}],"bordered":true,"striped":true,"dataKey":"51d69d204a8436ea4d6e38857b37a35b"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-bf1445a37747b7479b9d" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-bf1445a37747b7479b9d">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Country":["Country A","Country B","Country C"],"GDP":[8000,30000,23500],"Population":[2000,5400,10000],"Continent":["South America","Europe","North America"]},"columns":[{"id":"Country","name":"Country","type":"character"},{"id":"GDP","name":"GDP","type":"numeric"},{"id":"Population","name":"Population","type":"numeric"},{"id":"Continent","name":"Continent","type":"character"}],"bordered":true,"striped":true,"dataKey":"51d69d204a8436ea4d6e38857b37a35b"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Note the “tidy” features of this simple data frame:</p>
@@ -955,6 +957,26 @@ Beijing                          13</code></pre>
 </div>
 <p>We could carry out the inverse operation (i.e.&nbsp;transforming an object of the “data.frame” class to an object of class “numeric”) by passing the data frame object to the <code>as.numeric()</code> function. There are several functions that allow for class transformations such as this. Classes may feel confusing now, but they will become more intuitive as you work in R. They are important to be aware of, especially in the context of trouble shooting and debugging, since functions often don’t work as expected when they expect arguments of one class but receive another.</p>
 </section>
+<section id="exercises" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">3.5</span> Exercises</h2>
+<p><strong>Exercise 3a</strong></p>
+<p>Consider the following vector of Fahrenheit temperature values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates vector of Fahrenheit temperature values in Colorado</span></span>
+<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a>fahrenheit_colorado <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">33</span>, <span class="dv">15</span>, <span class="dv">22</span>, <span class="dv">44</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The first temperature is associated with Boulder; the second with Fort Collins; the third with Denver; and the fourth with Colorado Springs. Assign cities as labels to the temperature values with which they’re associated, and update <code>fahrenheit_colorado</code> with these changes.</p>
+<p><strong>Exercise 3b</strong></p>
+<p>Transform the class of <code>fahrenheit_colorado</code> to a data frame and assign it to a new object named <code>fahrenheit_colorado_df</code>:</p>
+<p><strong>Exercise 3c</strong></p>
+<p>What is the class of the “Continent” column in <code>country_df</code>?</p>
+<p><strong>Exercise 3d</strong></p>
+<p>Extract the first three rows, and columns 1 and 3, of <code>country_df</code> and assign this subsetted data frame to a new object named <code>country_df_subsettedA</code>. View it in the R Studio data viewer.</p>
+<p><strong>Exercise 3e</strong></p>
+<p>Extract the cell that contains the continent of Country B.</p>
+<p><strong>Exercise 3f</strong></p>
+<p>Deposit <code>country_df</code> and <code>fahrenheit_colorado</code> into a list named <code>exercise_list</code> and label the list elements using inline labeling:</p>
+</section>
 </section>
 <section id="functions-and-iteration" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Functions and Iteration</h1>
@@ -972,24 +994,24 @@ Beijing                          13</code></pre>
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="single-input-functions"><span class="header-section-number">4.1.1</span> Single-input functions</h3>
 <p>Let’s say we have a large collection of temperature data, measured in Fahrenheit, and we want to convert these data to Celsius. Recall that the formula to convert from Fahrenheit to Celsius is the following, where “C” represents temperature in Celsius, and “F” represents temperature in Fahrenheit:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fahrenheit to Celsius formula, where C is Celsius output and F is Fahrenheit input</span></span>
-<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a>(F<span class="dv">-32</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">9</span>)<span class="ot">=</span>C</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fahrenheit to Celsius formula, where C is Celsius output and F is Fahrenheit input</span></span>
+<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>(F<span class="dv">-32</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">9</span>)<span class="ot">=</span>C</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>As we discussed before, at its most basic level, R is a calculator; if for example, one of our Fahrenheit measurements is 55 degrees; we can convert this to Celsius by plugging 55 into the conversion formula:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Converts 55 degrees fahrenheit to Celsius</span></span>
-<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">55-32</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">9</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Converts 55 degrees fahrenheit to Celsius</span></span>
+<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">55-32</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">9</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 12.77778</code></pre>
 </div>
 </div>
 <p>This is easy enough, but if we have a large amount of temperature data that requires processing, we wouldn’t want to carry out this calculation for each measurement in our data collection. The first step in allowing us to carry out this conversion operation at scale is to write a function. Let’s see how we can wrap the Fahrenheit-Celsius formula above into a function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates fahrenheit to celsius conversion function and assigns it to a new object named "fahrenheit_to_celsius_converter"</span></span>
-<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>fahrenheit_to_celsius_converter<span class="ot">&lt;-</span><span class="cf">function</span>(fahrenheit_input){</span>
-<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>  celsius_output<span class="ot">&lt;-</span>(fahrenheit_input<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span>
-<span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(celsius_output)</span>
-<span id="cb132-5"><a href="#cb132-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates fahrenheit to celsius conversion function and assigns it to a new object named "fahrenheit_to_celsius_converter"</span></span>
+<span id="cb133-2"><a href="#cb133-2" aria-hidden="true" tabindex="-1"></a>fahrenheit_to_celsius_converter<span class="ot">&lt;-</span><span class="cf">function</span>(fahrenheit_input){</span>
+<span id="cb133-3"><a href="#cb133-3" aria-hidden="true" tabindex="-1"></a>  celsius_output<span class="ot">&lt;-</span>(fahrenheit_input<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span>
+<span id="cb133-4"><a href="#cb133-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(celsius_output)</span>
+<span id="cb133-5"><a href="#cb133-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s unpack the code above, which we used to create our function:</p>
 <ul>
@@ -1000,16 +1022,16 @@ Beijing                          13</code></pre>
 </ul>
 <p>After running that code, we can use the newly created <code>fahrenheit_to_celsius()</code> function to perform our Fahrenheit to Celsius transformations. Let’s say we have a Fahrenheit value of 68, and want to transform it to Celsius:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests function using an input of 68 degrees fahrenheit</span></span>
-<span id="cb133-2"><a href="#cb133-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fahrenheit_to_celsius_converter</span>(<span class="at">fahrenheit_input=</span><span class="dv">68</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests function using an input of 68 degrees fahrenheit</span></span>
+<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fahrenheit_to_celsius_converter</span>(<span class="at">fahrenheit_input=</span><span class="dv">68</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 20</code></pre>
 </div>
 </div>
 <p>Above, we passed the argument <code>fahrenheit_input=68</code> to the&nbsp;<code>fahrenheit_to_celsius_converter()</code> function that we created; the function then took this value (68), plugged it into “fahrenheit_input” within the function and assigned the resulting value to “celsius_output”; it then returned the value of “celsius_output” (20) back to us. Note that while it’s good practice to label one’s arguments (it can help avoid confusion, especially as we move into more complex functions with multiple inputs), it isn’t strictly necessary. For example, we could just enter a numeric argument for the temperature input, and the function will work:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uses "fahrenheit_to_celsius_converter" function using an input of 20 degrees fahrenheit</span></span>
-<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fahrenheit_to_celsius_converter</span>(<span class="dv">22</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb136"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uses "fahrenheit_to_celsius_converter" function using an input of 20 degrees fahrenheit</span></span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fahrenheit_to_celsius_converter</span>(<span class="dv">22</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -5.555556</code></pre>
 </div>
@@ -1020,40 +1042,40 @@ Beijing                          13</code></pre>
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="double-input-functions"><span class="header-section-number">4.1.2</span> Double-input functions</h3>
 <p>Let’s extend what we learned above by writing a function that takes two arguments, rather than one. The principles are the same. To see this, let’s define a function that takes export and import values as arguments, and returns a value for net exports (defined as the difference between total exports and total imports). Below, we assign this function to an object named&nbsp;<code>net_exports_calculation()</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># writes function that takes export and import values as inputs, and returns a value for net exports; function is assigned to a new object named "net_exports_calculation"</span></span>
-<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>net_exports_calculation<span class="ot">&lt;-</span><span class="cf">function</span>(exports, imports){</span>
-<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>  net_export_value<span class="ot">&lt;-</span>exports<span class="sc">-</span>imports</span>
-<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(net_export_value)</span>
-<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># writes function that takes export and import values as inputs, and returns a value for net exports; function is assigned to a new object named "net_exports_calculation"</span></span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>net_exports_calculation<span class="ot">&lt;-</span><span class="cf">function</span>(exports, imports){</span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>  net_export_value<span class="ot">&lt;-</span>exports<span class="sc">-</span>imports</span>
+<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(net_export_value)</span>
+<span id="cb138-5"><a href="#cb138-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In essence, the function has two arguments, “exports” and “imports” that are supplied by the user; the body of the function takes these arguments, and subtracts the supplied value of imports from exports, and assigns this result to the object <code>net_export_value</code>, which it then returns as the output. Let’s go ahead and test the function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests the "net_exports_calculation" function in a case where exports are 133, and imports are 55</span></span>
-<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="at">exports=</span><span class="dv">133</span>, <span class="at">imports=</span><span class="dv">55</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb139"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests the "net_exports_calculation" function in a case where exports are 133, and imports are 55</span></span>
+<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="at">exports=</span><span class="dv">133</span>, <span class="at">imports=</span><span class="dv">55</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 78</code></pre>
 </div>
 </div>
 <p>The function works as expected. Note that if we switch the order in which we supply the arguments, the function continues to work as expected, so long as we label the arguments:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests the "net_exports_calculation" function in a case where exports are 133, and imports are 55; reverses order in which inputs are supplied</span></span>
-<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="at">imports=</span><span class="dv">55</span>, <span class="at">exports=</span><span class="dv">133</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb141"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests the "net_exports_calculation" function in a case where exports are 133, and imports are 55; reverses order in which inputs are supplied</span></span>
+<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="at">imports=</span><span class="dv">55</span>, <span class="at">exports=</span><span class="dv">133</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 78</code></pre>
 </div>
 </div>
 <p>However, if the arguments are not labelled, the order in which they are supplied does matter. That is, if the arguments are not labelled, the function assumes that they are passed in the order they’re defined in the function; in this case, that means that the assumption is that the first argument is the import argument and the second is the export argument. So, the following presumes that exports are 55, and imports are 133:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests the "net_exports_calculation" function in a case where exports are 55, and imports are 133; does not explicitly label inputs, order matters</span></span>
-<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="dv">55</span>, <span class="dv">133</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests the "net_exports_calculation" function in a case where exports are 55, and imports are 133; does not explicitly label inputs, order matters</span></span>
+<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="dv">55</span>, <span class="dv">133</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -78</code></pre>
 </div>
 </div>
 <p>And the following presumes the opposite, that exports are 133, and imports are 55.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uses the "net_exports_calculation" function in a case where exports are 133, and imports are 55; does not explicitly label inputs, order matters</span></span>
-<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="dv">133</span>, <span class="dv">55</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uses the "net_exports_calculation" function in a case where exports are 133, and imports are 55; does not explicitly label inputs, order matters</span></span>
+<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a><span class="fu">net_exports_calculation</span>(<span class="dv">133</span>, <span class="dv">55</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 78</code></pre>
 </div>
@@ -1070,19 +1092,19 @@ Beijing                          13</code></pre>
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="iteration-with-a-single-input-function"><span class="header-section-number">4.2.1</span> Iteration with a single-input function</h3>
 <p>Let’s say we have four different Fahrenheit temperature values that we want to convert to Celsius: 45.6, 95.9, 67.8, 43. We could pass each input as an argument to <code>fahrenheit_to_celsius_converter()</code> individually, and get our Fahrenheit values that way, but it would quickly become tedious. Instead, we’ll implement a strategy that involves iteratively passing those input Fahrenheit temperature values to our converter function. As a first step, we’ll create a vector of Fahrenheit temperature input arguments:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates a vector of fahrenheit inputs</span></span>
-<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a>fahrenheit_input_vector<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">45.6</span>, <span class="fl">95.9</span>, <span class="fl">67.8</span>, <span class="dv">43</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates a vector of fahrenheit inputs</span></span>
+<span id="cb147-2"><a href="#cb147-2" aria-hidden="true" tabindex="-1"></a>fahrenheit_input_vector<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">45.6</span>, <span class="fl">95.9</span>, <span class="fl">67.8</span>, <span class="dv">43</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, we’ll use the <code>map()</code> function to iteratively pass the input values stored in <code>fahrenheit_input_vector</code> to <code>fahrenheit_to_celsius_converter()</code> and deposit the resulting output values in a list.</p>
 <p>To do so, we’ll pass<code>fahrenheit_input_vector</code> (i.e.&nbsp;the elements we want to iterate over) as the first argument to the <code>map()</code> function, and <code>fahrenheit_to_celsius_converter()</code> (i.e.&nbsp;the function to which we want to pass these input value) as the second argument. The result of this operation will be a new “results list”, containing the transformed temperature values for each input in the original vector of Fahrenheit values (<code>fahrenheit_input_vector</code>). We’ll assign this result/output list to a new object named<code>celsius_outputs_list</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes input arguments stored in "fahrenheit_input_vector" to the "fahrenheit_to_celsius_converter" function and deposits the resulting list of output values in a new object named "celsius_outputs_list"</span></span>
-<span id="cb147-2"><a href="#cb147-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_list<span class="ot">&lt;-</span><span class="fu">map</span>(<span class="at">.x=</span>fahrenheit_input_vector, <span class="at">.f=</span>fahrenheit_to_celsius_converter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes input arguments stored in "fahrenheit_input_vector" to the "fahrenheit_to_celsius_converter" function and deposits the resulting list of output values in a new object named "celsius_outputs_list"</span></span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_list<span class="ot">&lt;-</span><span class="fu">map</span>(<span class="at">.x=</span>fahrenheit_input_vector, <span class="at">.f=</span>fahrenheit_to_celsius_converter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In other words, the code above takes <code>fahrenheit_input_vector</code> and runs each of these numbers through the <code>fahrenheit_to_celsius_converter()</code> function, and then sequentially deposits the outputs values to the newly created <code>celsius_outputs_list</code> object. Let’s print the contents of <code>celsius_outputs_list:</code></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "celsius_outputs_list"</span></span>
-<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "celsius_outputs_list"</span></span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [1] 7.555556
@@ -1099,8 +1121,8 @@ Beijing                          13</code></pre>
 </div>
 <p>Recall that if we want to extract an element from a list, we can do so by specifying its index within double brackets. For instance, if we wanted to extract the second element in&nbsp;<code>celsius_outputs_list</code>, we could type the following:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb150"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extracts second element from "celsius_outputs_list"</span></span>
-<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_list[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extracts second element from "celsius_outputs_list"</span></span>
+<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_list[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 35.5</code></pre>
 </div>
@@ -1109,13 +1131,13 @@ Beijing                          13</code></pre>
 <p>Now, let’s see how to use a slightly different type of <code>map()</code> function to return our output values in a different form. In particular, let’s say we want to iteratively apply the values in <code>fahrenheit_input_vector</code> as arguments to the <code>fahrenheit_to_celsius_converter()</code> but that we want the outputs to be deposited in a numeric vector, rather than a list (as above).</p>
 <p>To do so, we can pass the same arguments we passed to the <code>map()</code> function, but use the <code>map_dbl()</code> function instead, which will return a numeric vector:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb152"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes input values in "fahrenheit_input_vector" to the "fahrenheit_to_celsius_converter" function, and assigns the resulting vector of outputs to "celsius_outputs_vector"</span></span>
-<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_vector<span class="ot">&lt;-</span><span class="fu">map_dbl</span>(<span class="at">.x=</span>fahrenheit_input_vector, <span class="at">.f=</span>fahrenheit_to_celsius_converter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes input values in "fahrenheit_input_vector" to the "fahrenheit_to_celsius_converter" function, and assigns the resulting vector of outputs to "celsius_outputs_vector"</span></span>
+<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_vector<span class="ot">&lt;-</span><span class="fu">map_dbl</span>(<span class="at">.x=</span>fahrenheit_input_vector, <span class="at">.f=</span>fahrenheit_to_celsius_converter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In short, the code above takes the first element of <code>fahrenheit_input_vector</code>, passes it as an input argument to <code>fahrenheit_to_celsius_converter()</code>, and deposits the output Celsius value as the first element in <code>celsius_outputs_vector</code>; it then takes the second element of <code>fahrenheit_input_vector</code>, passes it as an input argument to <code>fahrenheit_to_celsius_converter()</code>, and deposits the output Celsius value as the second element in <code>celsius_outputs_vector</code> ; and so on. Let’s print the contents of <code>celsius_outputs_vector</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "celsius_outputs_vector"</span></span>
-<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_vector</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "celsius_outputs_vector"</span></span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>celsius_outputs_vector</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  7.555556 35.500000 19.888889  6.111111</code></pre>
 </div>
@@ -1127,19 +1149,19 @@ Beijing                          13</code></pre>
 <p>In the previous subsection, we explored <code>map()</code> and <code>map_dbl()</code> in the context of working with single argument functions. In this section, we’ll explore how related functions from the <em>purrr</em> package can be used to iteratively pass arguments to a function with two input arguments. To illustrate, we will consider the <code>net_exports_calculation()</code> function we created above.</p>
 <p>Let’s say we have export and import data from three countries, and want to calculate net exports for each country. First, we’ll deposit our input arguments into two different vectors. The numeric vector <code>export_vector</code> contains information for export values, while <code>import_vector</code> contains information on import values:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb155"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates export and import vectors</span></span>
-<span id="cb155-2"><a href="#cb155-2" aria-hidden="true" tabindex="-1"></a>export_vector<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">78</span>, <span class="dv">499</span>, <span class="dv">785</span>)</span>
-<span id="cb155-3"><a href="#cb155-3" aria-hidden="true" tabindex="-1"></a>import_vector<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">134</span>, <span class="dv">345</span>, <span class="dv">645</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates export and import vectors</span></span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>export_vector<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">78</span>, <span class="dv">499</span>, <span class="dv">785</span>)</span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>import_vector<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">134</span>, <span class="dv">345</span>, <span class="dv">645</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, we’ll use the <code>map2()</code> function to iteratively pass the input arguments from these two vectors to the <code>net_exports_calculation()</code> function, and deposit the outputs (i.e.&nbsp;net export values) into a list, which we’ll assign to an object named <code>net_export_list</code>. The “.x” label signifies that <code>export_vector</code> is the first argument for the <code>net_exports_calculation()</code> function to iterate over, while the “.y” label signifies that <code>import_vector</code> is the second argument for <code>net_exports_calculation()</code> to iterate over. The “.f” label signifies the name of the function to which we’re applying these arguments.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes the e xport values contained in "export_vector" and the import values contained in "import_vector"applies to the "net_exports_calculation" function and deposits the resulting outputs in a list that's assigned to the new object entitled "net_export_list"</span></span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>net_export_list<span class="ot">&lt;-</span><span class="fu">map2</span>(<span class="at">.x=</span>export_vector, <span class="at">.y=</span>import_vector, <span class="at">.f=</span>net_exports_calculation)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes the e xport values contained in "export_vector" and the import values contained in "import_vector"applies to the "net_exports_calculation" function and deposits the resulting outputs in a list that's assigned to the new object entitled "net_export_list"</span></span>
+<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>net_export_list<span class="ot">&lt;-</span><span class="fu">map2</span>(<span class="at">.x=</span>export_vector, <span class="at">.y=</span>import_vector, <span class="at">.f=</span>net_exports_calculation)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In short, the code above takes the first value in <code>export_vector</code> and the first value in <code>import_vector</code> and passes these values to <code>net_exports_calculation</code> to calculate net exports for the first country, which is then deposited as the first element in <code>net_export_list</code>; then, it takes the second value in <code>export_vector</code> and the second value in <code>import_vector</code> and passes these values to <code>net_exports_calculation</code> to calculate net exports for the second country, which is then deposited as the second element in <code>net_export_list;</code> and likewise for the third country. We can print the contents of <code>net_export_list</code> to ensure that the code worked as expected:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "net_export_list"</span></span>
-<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>net_export_list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "net_export_list"</span></span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>net_export_list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [1] -56
@@ -1153,13 +1175,13 @@ Beijing                          13</code></pre>
 </div>
 <p>If, instead of depositing the results into a list, we’d like to deposit our outputs into a numeric vector, we can do so using the<code>map2_dbl()</code> function, the analog of <code>map_dbl()</code> which is used when the function takes two input arguments rather than one. We’ll assign our results vector to a new object named <code>net_export_vector</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb159"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes the e xport values contained in "export_vector" and the import values contained in "import_vector"applies to the "net_exports_calculation" function and deposits the resulting outputs in a numeric vector that's assigned to the new object entitled "net_export_vector"</span></span>
-<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a>net_export_vector<span class="ot">&lt;-</span><span class="fu">map2_dbl</span>(<span class="at">.x=</span>export_vector, <span class="at">.y=</span>import_vector, <span class="at">.f=</span>net_exports_calculation)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iteratively passes the e xport values contained in "export_vector" and the import values contained in "import_vector"applies to the "net_exports_calculation" function and deposits the resulting outputs in a numeric vector that's assigned to the new object entitled "net_export_vector"</span></span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>net_export_vector<span class="ot">&lt;-</span><span class="fu">map2_dbl</span>(<span class="at">.x=</span>export_vector, <span class="at">.y=</span>import_vector, <span class="at">.f=</span>net_exports_calculation)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s print the contents of <code>net_export_vector</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "net_export_vector"</span></span>
-<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>net_export_vector</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb161"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents of "net_export_vector"</span></span>
+<span id="cb161-2"><a href="#cb161-2" aria-hidden="true" tabindex="-1"></a>net_export_vector</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -56 154 140</code></pre>
 </div>
@@ -1172,8 +1194,8 @@ Beijing                          13</code></pre>
 <p>Though the examples offered in this section have been very simple, they nevertheless illustrate the potential usefulness of being able to write your own functions, and iteratively applying those functions across a range of input arguments.</p>
 <p>One question you might ask yourself is why bother writing functions, and iterating over the input arguments, when we can just carry out a vectorized operation. For example, we could have generated a vector of converted Celsius values by transforming our vector of Fahrenheit values with the Fahrenheit to Celsius conversion formula:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generates celsius vector through a vectorized operation</span></span>
-<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a>(fahrenheit_input_vector<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb163"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generates celsius vector through a vectorized operation</span></span>
+<span id="cb163-2"><a href="#cb163-2" aria-hidden="true" tabindex="-1"></a>(fahrenheit_input_vector<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  7.555556 35.500000 19.888889  6.111111</code></pre>
 </div>
@@ -1191,38 +1213,38 @@ Beijing                          13</code></pre>
 <p>Now that we know a little bit more about how functions are put together, it is worth briefly discussing global and local environments in R. The global environment is the environment where the objects we define are created and stored during an R Session. A local environment is a temporary environment created within functions. When objects are defined within a function, those objects only exist within that function, and won’t be accessible globally (unless they’re explicitly assigned to the global environment).</p>
 <p>To get a better sense of this, let’s first define an object, <code>x</code> in our global environment:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a variable in the global environment</span></span>
-<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="dv">24</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a variable in the global environment</span></span>
+<span id="cb165-2"><a href="#cb165-2" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="dv">24</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, we’ll create a toy function that defines another value for <code>x</code> within its environment.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates a toy function that takes a numeric input argument ("input1"); it defines an object, x, within the function, then defines a function, z, that's the sum of x and input1. It returns Z as an output</span></span>
-<span id="cb165-2"><a href="#cb165-2" aria-hidden="true" tabindex="-1"></a>toy_function<span class="ot">&lt;-</span><span class="cf">function</span>(input1){</span>
-<span id="cb165-3"><a href="#cb165-3" aria-hidden="true" tabindex="-1"></a>  x<span class="ot">&lt;-</span><span class="dv">5</span></span>
-<span id="cb165-4"><a href="#cb165-4" aria-hidden="true" tabindex="-1"></a>  z<span class="ot">&lt;-</span>x<span class="sc">+</span>input1</span>
-<span id="cb165-5"><a href="#cb165-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(z)</span>
-<span id="cb165-6"><a href="#cb165-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates a toy function that takes a numeric input argument ("input1"); it defines an object, x, within the function, then defines a function, z, that's the sum of x and input1. It returns Z as an output</span></span>
+<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a>toy_function<span class="ot">&lt;-</span><span class="cf">function</span>(input1){</span>
+<span id="cb166-3"><a href="#cb166-3" aria-hidden="true" tabindex="-1"></a>  x<span class="ot">&lt;-</span><span class="dv">5</span></span>
+<span id="cb166-4"><a href="#cb166-4" aria-hidden="true" tabindex="-1"></a>  z<span class="ot">&lt;-</span>x<span class="sc">+</span>input1</span>
+<span id="cb166-5"><a href="#cb166-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(z)</span>
+<span id="cb166-6"><a href="#cb166-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Go ahead and test the function to ensure it works as expected.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co"># passes the argument "input1=7" to the toy function</span></span>
-<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a><span class="fu">toy_function</span>(<span class="at">input1=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb167"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="co"># passes the argument "input1=7" to the toy function</span></span>
+<span id="cb167-2"><a href="#cb167-2" aria-hidden="true" tabindex="-1"></a><span class="fu">toy_function</span>(<span class="at">input1=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 12</code></pre>
 </div>
 </div>
 <p>In this context, the key thing to note is that even though we defined <code>x&lt;-5</code> within the function, when we print the value of <code>x</code>, it returns 24, which was the value assigned in the global environment. The local object <code>x</code>, assigned a value of 5, only exists when the function runs; then it disappears.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value of x; note it returns the value from the global environment</span></span>
-<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value of x; note it returns the value from the global environment</span></span>
+<span id="cb169-2"><a href="#cb169-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 24</code></pre>
 </div>
 </div>
 <p>Note, also that when we try to print out the value of <code>z</code>, we are met with an error, since it’s only defined within the local environment of the function; <code>z</code> is not an object in the global environment and does not exist in the context of this environment. Rather, it is created in the function’s local environment and disappears after the function finishes running.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value of z; note that there's an error, since z is only defined within the local environment of the function</span></span>
-<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a>z</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb171"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value of z; note that there's an error, since z is only defined within the local environment of the function</span></span>
+<span id="cb171-2"><a href="#cb171-2" aria-hidden="true" tabindex="-1"></a>z</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error:
 ! object 'z' not found</code></pre>
@@ -1230,8 +1252,8 @@ Beijing                          13</code></pre>
 </div>
 <p>Another way of noting this is to call the <code>ls()</code> function, and see that “z” is not printed to the console along with other objects in the global environment, since it’s only defined within <code>toy_function()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints objects in memory; note that z is not included, since it's only defined within the function</span></span>
-<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb173"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints objects in memory; note that z is not included, since it's only defined within the function</span></span>
+<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "a"                                  "asia_temperatures_celsius"         
  [3] "asia_temperatures_df"               "b"                                 
@@ -1239,17 +1261,25 @@ Beijing                          13</code></pre>
  [7] "celsius_outputs_vector"             "country_df"                        
  [9] "d"                                  "dataset_selection"                 
 [11] "example_list"                       "export_vector"                     
-[13] "fahrenheit_input_vector"            "fahrenheit_to_celsius_converter"   
-[15] "import_vector"                      "locations"                         
-[17] "name_vector_list"                   "net_export_list"                   
-[19] "net_export_vector"                  "net_exports_calculation"           
-[21] "north_america_temperatures_celsius" "toy_function"                      
-[23] "university_name_location"           "university_names"                  
-[25] "university_of_colorado_locations"   "x"                                 
-[27] "xy_sum"                             "y"                                 </code></pre>
+[13] "fahrenheit_colorado"                "fahrenheit_input_vector"           
+[15] "fahrenheit_to_celsius_converter"    "import_vector"                     
+[17] "locations"                          "name_vector_list"                  
+[19] "net_export_list"                    "net_export_vector"                 
+[21] "net_exports_calculation"            "north_america_temperatures_celsius"
+[23] "toy_function"                       "university_name_location"          
+[25] "university_names"                   "university_of_colorado_locations"  
+[27] "x"                                  "xy_sum"                            
+[29] "y"                                 </code></pre>
 </div>
 </div>
 <p>An important implication of the fact that the local environment within a function exists apart from the global environment is that when writing functions, you don’t have to worry about accidentally overwriting global objects.</p>
+</section>
+<section id="exercises-1" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="exercises-1"><span class="header-section-number">4.5</span> Exercises</h2>
+<p><strong>Exercise 4a</strong></p>
+<p>Write a function that takes a monetary value (in US dollars) as an input, and returns the equivalent value in Euros. Assign the function to an object, and test it out with some sample arguments.</p>
+<p><strong>Exercise 4b</strong></p>
+<p>Take the function you wrote in the exercise immediately above, and use a function from the <em>purrr</em> package to programmatically generate a data frame where one column contains US dollars in the following amounts: 10.25, 1245.55, 83, 76, 11559, and the other column contains the equivalent sum of money in Euros.</p>
 </section>
 </section>
 

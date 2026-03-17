@@ -745,6 +745,39 @@ class(asia_temperatures_df)
 
 We could carry out the inverse operation (i.e. transforming an object of the "data.frame" class to an object of class "numeric") by passing the data frame object to the `as.numeric()` function. There are several functions that allow for class transformations such as this. Classes may feel confusing now, but they will become more intuitive as you work in R. They are important to be aware of, especially in the context of trouble shooting and debugging, since functions often don't work as expected when they expect arguments of one class but receive another.
 
+## Exercises
+
+**Exercise 3a**
+
+Consider the following vector of Fahrenheit temperature values:
+
+```{r}
+# creates vector of Fahrenheit temperature values in Colorado
+fahrenheit_colorado <- c(33, 15, 22, 44)
+```
+
+The first temperature is associated with Boulder; the second with Fort Collins; the third with Denver; and the fourth with Colorado Springs. Assign cities as labels to the temperature values with which they're associated, and update `fahrenheit_colorado` with these changes.
+
+**Exercise 3b**
+
+Transform the class of `fahrenheit_colorado` to a data frame and assign it to a new object named `fahrenheit_colorado_df`:
+
+**Exercise 3c**
+
+What is the class of the "Continent" column in `country_df`?
+
+**Exercise 3d**
+
+Extract the first three rows, and columns 1 and 3, of `country_df` and assign this subsetted data frame to a new object named `country_df_subsettedA`. View it in the R Studio data viewer.
+
+**Exercise 3e**
+
+Extract the cell that contains the continent of Country B.
+
+**Exercise 3f**
+
+Deposit `country_df` and `fahrenheit_colorado` into a list named `exercise_list` and label the list elements using inline labeling:
+
 # Functions and Iteration
 
 Given the enormous variety and sophistication of the R package ecosystem, you will not have to become an expert programmer to work with data in R; rather, you can draw on the functions others have written to implement virtually any data-related task you could imagine. However, developing a basic understanding of how to write your own functions is nevertheless important, for a variety of reasons:
@@ -1029,3 +1062,13 @@ ls()
 ```
 
 An important implication of the fact that the local environment within a function exists apart from the global environment is that when writing functions, you don't have to worry about accidentally overwriting global objects.
+
+## Exercises
+
+**Exercise 4a**
+
+Write a function that takes a monetary value (in US dollars) as an input, and returns the equivalent value in Euros. Assign the function to an object, and test it out with some sample arguments.
+
+**Exercise 4b**
+
+Take the function you wrote in the exercise immediately above, and use a function from the *purrr* package to programmatically generate a data frame where one column contains US dollars in the following amounts: 10.25, 1245.55, 83, 76, 11559, and the other column contains the equivalent sum of money in Euros.
