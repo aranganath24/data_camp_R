@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -48,14 +83,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#preliminaries-and-set-up" id="toc-preliminaries-and-set-up" class="nav-link" data-scroll-target="#preliminaries-and-set-up"><span class="header-section-number">2</span> Preliminaries and Set-Up</a>
   <ul class="collapse">
-  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link" data-scroll-target="#preliminaries"><span class="header-section-number">1.1</span> Preliminaries</a>
+  <li><a href="#install-r-and-r-studio" id="toc-install-r-and-r-studio" class="nav-link" data-scroll-target="#install-r-and-r-studio"><span class="header-section-number">2.1</span> Install R and R Studio</a></li>
+  <li><a href="#download-data-and-workshop-materials" id="toc-download-data-and-workshop-materials" class="nav-link" data-scroll-target="#download-data-and-workshop-materials"><span class="header-section-number">2.2</span> Download Data and Workshop Materials</a></li>
+  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages"><span class="header-section-number">2.3</span> Install and load packages</a></li>
+  </ul></li>
+  <li><a href="#the-r-language" id="toc-the-r-language" class="nav-link" data-scroll-target="#the-r-language"><span class="header-section-number">3</span> The R Language</a>
   <ul class="collapse">
-  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up"><span class="header-section-number">1.1.1</span> Set-Up</a></li>
+  <li><a href="#r-as-a-calculator" id="toc-r-as-a-calculator" class="nav-link" data-scroll-target="#r-as-a-calculator"><span class="header-section-number">3.1</span> R as a calculator</a></li>
+  <li><a href="#object-assignment" id="toc-object-assignment" class="nav-link" data-scroll-target="#object-assignment"><span class="header-section-number">3.2</span> Object Assignment</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#foundations" id="toc-foundations" class="nav-link" data-scroll-target="#foundations"><span class="header-section-number">2</span> Foundations</a></li>
   </ul>
 </nav>
 </div>
@@ -88,15 +127,212 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<section id="preliminaries" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="preliminaries"><span class="header-section-number">1.1</span> Preliminaries</h2>
-<section id="set-up" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="set-up"><span class="header-section-number">1.1.1</span> Set-Up</h3>
+<p>This two-part workshop provides a general introduction to the R programming language, with a focus on carrying out common data-related tasks that come up in applied research across a variety of fields. It does not aim to provide a comprehensive overview of R’s capabilities, which are vast; rather, the workshop’s overarching goal is to help you cultivate basic proficiency in R, and develop a foundation for further exploration and self-study.</p>
+<p>By the end of the workshop, you will be able to:</p>
+<ul>
+<li><p><strong>Explain and use basic features of the R language</strong>, such as object assignment and common data structures (such as vectors, lists, and data frames) to organize and store data (Section 2)</p></li>
+<li><p><strong>Write simple custom functions in R</strong> that take input(s) and return output(s), and a<strong>pply functions iteratively</strong> to multiple values to streamline repetitive tasks (Section 3)</p></li>
+<li><p><strong>Perform fundamental data wrangling and processing tasks</strong> on real-world datasets (such as deleting or transforming variables, reshaping data, and combining multiple datasets) in preparation for analysis (Section 4)</p></li>
+<li><p><strong>Conduct basic data analysis and create visualizations in R</strong> to understand your data, and summarize and communicate insights to others (Section 5)</p></li>
+</ul>
+</section>
+<section id="preliminaries-and-set-up" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Preliminaries and Set-Up</h1>
+<p>Before proceeding, please take some time to get set up so that you can actively follow along with the lesson on your own computers. It is necessary to install R and R Studio (if you haven’t already), download the workshop data, and install relevant packages and load them into memory. The following sub-sections provide guidance on these tasks.</p>
+<section id="install-r-and-r-studio" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="install-r-and-r-studio"><span class="header-section-number">2.1</span> Install R and R Studio</h2>
+<p>If you haven’t already, please go ahead and install both the R and RStudio applications. R and RStudio must be installed separately; you should install R first, and then RStudio. The R application is a bare-bones computing environment that supports statistical computing using the R programming language; RStudio is a visually appealing, feature-rich, and user-friendly interface that allows users to interact with this environment in an intuitive way. Once you have both applications installed, you don’t need to open up R and RStudio separately; you only need to open and interact with RStudio (which will run R in the background).</p>
+<p>Please follow these <a href="https://posit.co/download/rstudio-desktop/#download">instructions</a> to download R and R Studio; make sure you download the version of R appropriate for your operating system.</p>
+<p>Once you’ve downloaded R and R Studio, go ahead and open R Studio, which will look something like this:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-plot-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-plot-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/rstudio_window_revised.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-plot-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The R Studio Interface
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Don’t worry if your R Studio interface doesn’t look exactly like this; we would expect to see minor cosmetic differences in the appearance of the interface across operating systems and computers (based on how they’re configured). However, you should see four distinct windows within the larger RStudio interface:</p>
+<ul>
+<li>The <strong>top-left</strong> window is known as the <em>Source</em> window.
+<ul>
+<li>The <em>Source</em> window is where we can write our R scripts (including the code associated with this tutorial), and execute those scripts. We can also type in R code into the “Console” window (bottom-left window), but it is preferable to write our code in a script within the source window. That’s because scripts can be saved (while code written into the console cannot); writing scripts therefore allows us to keep track of what we’re doing, and facilitates the reproducibility of our work. Note that in some cases, we may not see a <em>Source</em> window when we first open RStudio. In that case, to start a new script, simply click the <code>File</code> button on the RStudio menu bar, scroll down to <code>New File</code> button, and then select <code>R Script</code> from the menu bar that opens up.</li>
+<li>It’s also worth noting that the outputs of certain functions will appear in the <em>Source</em> window. In the context of our tutorial, when we want to view our datasets, we will use the <code>View()</code> function, which will display the relevant data within a new tab in the <em>Source</em> window.</li>
+</ul></li>
+<li>The <strong>top-right</strong> window is the <em>Environment/History</em> pane of the RStudio interface.
+<ul>
+<li>The “Environment” tab of this window provides information on the datasets we’ve loaded into RStudio, as well as objects we have defined (we’ll talk about objects more later in the tutorial). -The “History” tab of the window provides a record of the R commands we’ve run in a given session.</li>
+</ul></li>
+<li>The <strong>bottom-right</strong> window is the <em>Files/Plots/Packages/Help/Viewer</em> window.
+<ul>
+<li>The “Files” tab displays our computer’s directories and file structures and allows us to navigate through them without having to leave the R environment.</li>
+<li>The “Plots” tab is the tab where we can view any visualizations that we create. Within the “Plots” tab, make note of the “Zoom” button, which we can use to enlarge the display of our visualizations if they’re too compressed in the “Plots” window. Also, note the “Export” button within the “Plots” tab (next to the “Zoom” button); we can use this button to export the displayed visualization to a .png or .jpeg file that can be used outside of RStudio.</li>
+<li>The “Packages” tab provides information on which packages have been installed, as well as which packages are currently loaded (more on packages below)</li>
+<li>The “Help” tab displays documentation for R packages and functions. If you want to know more about how a package or function work, we can simply type a “?” followed by the package or function’s name (no space between the question mark and the name) and relevant information will be displayed within the “Help” tab.</li>
+<li>The “Viewer” tab displays HTML output. If we write code that generates an HTML file, we can view it within the “Viewer” tab.</li>
+</ul></li>
+<li>The <strong>bottom-left</strong> window is the <em>Console/Terminal/Jobs</em> window.
+<ul>
+<li>The “Console” tab is where we can see our code execute when we run our scripts, as well as certain outputs produced by those scripts. In addition, if there are any error or warning messages, they will be printed to the “Console” tab. We can also type code directly into the console, but as we noted earlier, it is better practice to write our code in a script and then run it from there.</li>
+<li>The “Terminal”, “Jobs” tabs are not relevant for our workshop. We’ll briefly provide an overview of “R Markdown” towards the end of the lesson.</li>
+</ul></li>
+</ul>
+</section>
+<section id="download-data-and-workshop-materials" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="download-data-and-workshop-materials"><span class="header-section-number">2.2</span> Download Data and Workshop Materials</h2>
+<p>In this workshop, we’ll be working with a handful of real-world datasets. One of the datasets is a <a href="https://www.gu.se/en/quality-government/qog-data/data-downloads/basic-dataset">cross-national dataset published</a> by the Quality of Government (QoG) Institute at the University of Gothenburg. The dataset contains information on a variety of political, social, and economic variables from the early 2020s; additional <a href="https://www.gu.se/en/quality-government/qog-data/data-downloads/basic-dataset">documentation</a> is available on the QoG’s website. In addition, we’ll work with several World Bank datasets downloaded from the <a href="https://databank.worldbank.org/source/world-development-indicators">World Development Indicators</a>.</p>
+<p>Though you can download these data directly from these sources, they are also available on the Workshop’s dedicated <a href="https://github.com/aranganath24/data_camp_R">repository</a>. Please download this repository to your computer by clicking the green “Code” button, and selecting the “Download ZIP” option. Alternatively, if you are already familiar with Github, you can also clone the repository via the command line. A third option is to download the repository directly by clicking the following <a href="https://github.com/aranganath24/data_camp_R/archive/refs/heads/main.zip">link</a>.</p>
+<p>The data for the workshop is in the repository’s “data” folder, and we’ll read it into our R environment later in the lesson. The repository folder also contains other materials, which we’ll introduce as necessary over the course of the workshop. For now, please go ahead and open the downloaded repository (which will be a folder named “data_camp_R”, and double-click the file named “data_camp_r.Rproj”. When you open this .Rproj file, a new workshop-specific R Studio environment should open.</p>
+<p>At this point, please open the “workshop_script_empty.R” file by clicking <strong>File</strong> and then <strong>Open File</strong>, and selecting that file by navigating to the downloaded workshop repository. You can follow along with the lesson by typing our workshop code into this script.</p>
+<p>This script is pre-populated with “comments”; in R, comments are always preceded by a “#”, which ensures that any text that comes after it will indeed be interpreted as a comment, rather than as code that must be executed. Code comments are be an essential way of documenting our work by explaining code in simple human-readable language. These comments allow us to communicate with others who might read our code, as well as our future selves.</p>
+<p>When you begin writing your own R scripts, you should comment your code as you go. The “workshop_script_empty.R” file, however, contains pre-written comments; as we proceed through the workshop, you can write the relevant code immediately below the appropriate comment (remember to periodically save your script as you go). Note that the workshop directory also contains a fully populated script, named “workshop_script_complete.R”, which contains both the comments and the code; you can use this completed script as a reference document, in case you get lost at any point.</p>
+</section>
+<section id="install-and-load-packages" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="install-and-load-packages"><span class="header-section-number">2.3</span> Install and load packages</h2>
+<p>Functions are essentially programs that apply an algorithm that transforms input(s) into outputs; they are akin to recipes that specify how ingredients (inputs) are to be combined and processed to create a meal (the output). As we will see, many functions come pre-programmed into R. However, R’s native capabilities are significantly extended by a robust ecosystem of open-source user-written packages.</p>
+<p>These R packages are essentially pre-written collections of functions organized around a given theme. One might think of packages as “cookbooks” of sorts, which contain a collection of different recipes (i.e.&nbsp;functions) united by some thematic thread. Packages are fundamentally a set of interrelated functions, but typically also contain other elements, such as data and documentation. One of the big advantages of using R is that it has a very large user community among social scientists, statisticians, and digital humanists, who frequently publish R packages, and thereby allow anyone who needs to accomplish the tasks to which the package addresses itself to use the package in the context of their own projects. The ability to use published packages considerably simplifies the work of applied data research using R; it means that we rarely have to write code entirely from scratch, and can build on the code that others have published in the form of packages. This allows applied researchers to focus on substantive problems, without having to get too bogged down in complicated programming tasks. Just as it is easier to make a meal with a cookbook (rather than deriving a recipe from scratch), it is easier to implement common data analysis tasks in R by using packages (rather than coding functions from scratch).</p>
+<p>Over the course of the two-day workshop, we will use functions from a variety of packages:</p>
+<ul>
+<li><p>The <em>tidyverse</em>, which is a suite of packages dedicated to various data analysis and visualization tasks</p></li>
+<li><p><em>fastDummies</em>, which makes it easy to transform categorical variables into binary indicator variables</p></li>
+<li><p><em>psych</em>, which (among other things) contains useful functions to generate tables of summary statistics</p></li>
+<li><p><em>stargazer</em>, which helps create publication-quality regression tables</p></li>
+</ul>
+<p>To install a package in R, we can use the <code>install.packages()</code> function. In the code block below, the name of the package we want to install is enclosed within quotation marks and placed within parentheses after printing <code>install.packages</code>. Running the code below in your script will download the packages mentioned above to your computer. To run a code selection in an R script, you can highlight it and click the <strong>Run</strong> button in the R Studio menu bar. Alternatively, you can place the cursor on the line of code you’d like to run, and use a keyboard shortcut to run the code. On a Mac, the shortcut is clicking <strong>Command</strong> + <strong>Shift</strong> + <strong>Return</strong>. If you are using Windows, the keyboard shortcut to run the current line of code should be <strong>Ctrl</strong> + <strong>Enter</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># installs workshop packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"fastDummies"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"psych"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"stargazer"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If you would like a more efficient way to install packages, we can pass the package names as a vector to the <code>install.packages()</code> function. Vectors, which we will discuss further below, are created using the <code>c()</code> function (the “c” stands for “combine”):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># installs workshop packages by passing a vector of package names # to the "install.packages()" function</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"fastDummies"</span>, <span class="st">"psych"</span>, <span class="st">"stargazer"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>At this point, the packages should be installed on your computers, but the packages are not yet ready for use. Before we can use our packages, we must load them into our current R environment. The process of loading installed packages into a current R environment is akin to opening up an application on your phone or computer after it has been installed. That is, even after an application has been installed, you can’t use it until you open it. To load (i.e.&nbsp;“open”) an R package, we pass the name of the package(s) we want to load as an argument to the <code>library()</code> function. Below, we load the packages we have installed into memory:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loads workshop packages into memory</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastDummies)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>At this point, these packages are loaded into memory and available for us to use. One important thing to note regarding the installation and loading of packages is that we typically only have to install packages once; after a package is installed, there is usually no need to subsequently reinstall it, so long as you don’t make major changes to your R or R Studio applications. However, we must load the packages we need (using the <code>library()</code> function) every time we open a new R session. In other words, if we were to close RStudio at this point and open it up later, we would <strong>not</strong> need to install these packages again, but <strong>would</strong> need to load them into memory using the <code>library()</code> function again.</p>
 </section>
 </section>
+<section id="the-r-language" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> The R Language</h1>
+<p>Our goal in this section is to learn some important principles and features of the R programming language; we won’t attempt a comprehensive survey of the R programming language, but rather, emphasize key elements that will help you move quickly into applied data-based research. As you use R in your own research, you will inevitably learn more about the language itself.</p>
+<p>We will discuss R as a calculator, and the concept of object assignment, but will spend most of our time learning about three fundamental data structures that you will use all the time when working on data-based research projects in R: vectors, data frames, and lists.</p>
+<section id="r-as-a-calculator" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="r-as-a-calculator"><span class="header-section-number">3.1</span> R as a calculator</h2>
+<p>At its most basic level, R can be used as a calculator. For instance:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculates 2+2</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">+</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>Now, let’s try some more mathematical operations:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculates 65 to the power of 4</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dv">65</span><span class="sc">^</span><span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17850625</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculates the sum of 24 and 4, divided by 7</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">24</span><span class="sc">+</span><span class="dv">4</span>)<span class="sc">/</span><span class="dv">7</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculates 2.78 subtracted from 10.453</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fl">10.453-2.78</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.673</code></pre>
+</div>
+</div>
+<p>While this is a useful and logical starting point, the possibility of assigning values to objects (or variables) considerably increases the scope of the operations we are able to carry out. We turn to object assignment in the next sub-section.</p>
 </section>
-<section id="foundations" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Foundations</h1>
+<section id="object-assignment" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="object-assignment"><span class="header-section-number">3.2</span> Object Assignment</h2>
+<p>The concept of object (or variable) assignment is a fundamental concept when working in a scripting environment; indeed, the ability to easily assign values to objects is what allows us to easily and intuitively manipulate and process our data in a programmatic setting. To better understand the mechanics of object assignment, consider the following:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign value 5 to new object named x</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In the code above, we use R’s assignment operator, <code>&lt;-</code> (i.e.&nbsp;a left-pointing arrow) to assign the value 5 to an object named <code>x</code>. Now that an object named <code>x</code> has been created and assigned the value 5, printing <code>x</code> in our console (or printing <code>x</code> in our script and running it) will return the value that has been assigned to the <code>x</code> object, i.e.&nbsp;5:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value assigned to "x"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+</div>
+<p>More generally, the process of assignment effectively equates the output created by the code on the right side of the assignment operator (<code>&lt;-</code>) to an object with a name that is specified on the left side of the assignment operator. Whenever we want to look at the contents assigned to an object (i.e.&nbsp;the output created by the code to the right side of the assignment operator), we simply print the name of the object in the R console (or print the name and run it within a script).</p>
+<p>Let’s create another object, named <code>y</code>, and assign it the value “12”:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign value 12 to new object named y</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">12</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>As we noted above, we can print the value that was assigned to <code>y</code> by printing the name of the object:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value assigned to "y"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+</div>
+<p>Once objects are defined, it’s possible to use those objects in arithmetic operations. For example:</p>
+<p>Once objects are defined, it’s possible to use those objects in arithmetic operations. For example:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints the value of x + y</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">+</span>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17</code></pre>
+</div>
+</div>
+<p>It’s also possible to use existing objects to assign values to new ones. For example, we can assign the sum of <code>x</code> and <code>y</code> to a new object that we’ll name <code>xy_sum</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates a new object, named "xy_sum" whose value is the sum of "x" and "y"</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>xy_sum <span class="ot">&lt;-</span> x<span class="sc">+</span>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now, let’s print the value of <code>xy_sum</code>that was created by the previous assignment operation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints value of of "xy_sum"</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>xy_sum</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17</code></pre>
+</div>
+</div>
+<p>As expected, we see that the value assigned to <code>xy_sum</code> is “17” (i.e.&nbsp;the sum of the values assigned to <code>x</code> and <code>y</code>).</p>
+<p>Thus far, we’ve been working with numeric values, but it’s also possible to assign non-numeric contents to objects. For example, we can assign strings (i.e.&nbsp;lines of text) to objects. Below, consider the string “Boulder, CO” assigned to an object named <code>our_location:</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assigns string "Boulder, CO" to object named "our_location"</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>our_location <span class="ot">&lt;-</span> <span class="st">"Boulder, CO"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can print the string that has been assigned to the <code>our_location</code> object by typing the name of the object in our console, or running it from our script:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints contents assigned to "our_location" object</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>our_location</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Boulder, CO"</code></pre>
+</div>
+</div>
+<p>While these examples are very simple, we can assign virtually any R code, and by extension, the data structure(s) generated by that code (such as datasets, vectors, graphs/plots, functions etc.) to an R object. When naming your objects, try to be descriptive, so that the name of the object signifies something about the code or outputs assigned to it.</p>
+</section>
 </section>
 
 </main>
