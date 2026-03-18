@@ -453,7 +453,6 @@ qog_copy_selection
 # deletes "cname", "undp_hdi", and "wdi_acel" from "qog_copy_selection"
 qog_copy_selection %>% select(-c(cname, undp_hdi, wdi_acel))
 
-{r}
 # moves "ccdoealp" to front of "qog_copy_selection" dataset
 qog_copy_selection %>% relocate(ccodealp)
 
@@ -676,6 +675,381 @@ world_bank_list_cleaned<-map(.x=world_bank_list, .f=worldbank_cleaning_function)
 
 # prints contents of "world_bank_list_cleaned"
 world_bank_list_cleaned
+
+# view "qog_copy_selection" in Viewer; note NA values
+View(qog_copy_selection)
+
+# makes toy dataset, assigned to object named "student_scores"
+student_scores<-data.frame(Age=c(25, NA, 30, 22, NA),
+                           Score=c(85, 90, NA, 78, 88))
+
+# prints "student_scores"
+student_scores
+
+# uses "is.na" to return a logical matrix indicating missing values (TRUE for missing values)
+is.na(student_scores)
+
+# calculates total number of missing values per column
+colSums(is.na(student_scores))
+
+# calculates missing data percentage in "student_scores"
+# first calculates count of missing values and assigns it to "total_missing"
+total_missing<-sum(is.na(student_scores))
+# calculates total number of cells and assigns it to "total_values"
+total_values<-prod(dim(student_scores))
+# calculates percentage of missing data and assigns it to "missing_pct"
+missing_pct<-(total_missing/total_values)*100
+
+# prints contents of "missing_pct"
+missing_pct
+
+# creates function to calculate the percentage of missing data in a dataset
+missing_data_percentage<-function(dataset){
+  # generates count of missing values
+  total_missing<-sum(is.na(dataset))
+  # calculates total number of cells
+  total_values<-prod(dim(dataset))
+  # calculates percentage of missing data
+  missing_pct<-(total_missing/total_values)*100
+  return(missing_pct)
+}
+
+# passes "student_scores" as an argument to custom function "missing_data_percentage" which yields the percentage of missing data in the "student_scores" dataset
+missing_data_percentage(student_scores)
+
+# calculates missing data percentage in "qog_copy"
+missing_data_percentage(qog_copy)
+
+# calculates missing data percentage in "qog_copy_selection"
+missing_data_percentage(qog_copy_selection)
+
+# removes all rows with NA values from "student_scores"
+drop_na(student_scores)
+
+# removes all rows where "Age" has NA values in "student_scores"
+drop_na(student_scores, Age)
+
+# changes NA values in Age column to 22 where ID is equal to 5, and makes no changes otherwise; assigns modified data frame to "student_scores_modified"
+student_scores_modified<-student_scores %>% 
+  mutate(Age = if_else(is.na(Age) & row_number()==5, 22, Age))
+
+# prints "student_scores_modified"
+student_scores_modified
+
+# calculates mean of "Score" (NA values are not excluded; default behavior)
+mean(student_scores$Score)
+
+# calculates mean of "Score" (NA values are excluded due to na.rm=TRUE specification; as a result, the function computes an average based on non-NA values)
+mean(student_scores$Score, na.rm=TRUE)
+
+# Generate summary statistics for "qog_copy_selection" and assign table of 
+# summary statistics to a new object named "qog_copy_selection_summarystats1"
+qog_copy_selection_summarystats1<-describe(qog_copy_selection)
+
+# view "qog_copy_selection_summarystats1" in Viewer
+View(qog_copy_selection_summarystats1)
+
+# removes non-numeric variables and assigns modified data frame to new object named "qog_copy_selection_numeric"
+qog_copy_selection_numeric<-
+  qog_copy_selection %>% 
+  dplyr::select(-ht_region) %>% 
+  dplyr::select(where(is.numeric))
+
+# Generates summary statistics for numeric variables 
+# (i.e. those in qog_copy_selection_numeric) using "describe()
+qog_copy_selection_numeric_summarystats2<-describe(qog_copy_selection_numeric)
+
+# views "qog_copy_selection_numeric_summarystats2" in data viewer
+View(qog_copy_selection_numeric_summarystats2)
+
+# uses stargazer package to generate summary statistics for qog_copy_selection_numeric
+stargazer(as.data.frame(qog_copy_selection_numeric), type = "text")
+
+# Create new character variable named "region" based on "ht_region" variable that contains region information encoded as strings
+qog_copy_selection<-
+  qog_copy_selection %>% 
+  mutate(region=case_when(ht_region==1~"EasternEuropePostSoviet",
+                          ht_region==2~"LatinAmerica",
+                          ht_region==3~"NorthAfricaMiddleEast",
+                          ht_region==4~"SubSaharanAfrica",
+                          ht_region==5~"WesternEuropeNorthAmerica",
+                          ht_region==6~"EastAsia",
+                          ht_region==7~"SouthEastAsia",
+                          ht_region==8~"SouthAsia",
+                          ht_region==9~"Pacific",
+                          ht_region==10~"Caribbean"))
+
+# creates frequency table for the region variable
+qog_copy_selection %>% 
+  count(region)
+
+# adds percentage column and assigns modified frequency
+# table to new object called "region_frequency"
+region_frequency<-qog_copy_selection %>% 
+  count(region) %>% 
+  mutate(percent=n/sum(n)*100)
+
+# Views "region_frequency" in data viewer
+View(region_frequency)
+
+# creates long crosstab of region and democracy status (bmr_dem)
+# variables from "qog_copy_selection" data frame
+qog_copy_selection %>% 
+  count(region, bmr_dem)
+
+# creates wide crosstab of region and democracy status (bmr_dem)
+# variables from "qog_copy_selection" data frame
+qog_copy_selection %>% 
+  count(region, bmr_dem) %>% 
+  pivot_wider(names_from=bmr_dem,
+              values_from=n,
+              values_fill=0)
+
+# makes frequency table of region variable using tabyl()
+tabyl(qog_copy_selection, region)
+
+# makes crosstab of region and democracy status using tabyl(); adds row and column totals using "adorn_totals" function
+tabyl(qog_copy_selection, region, bmr_dem) %>% 
+  adorn_totals(where=c("row", "col"))
+
+# Creates summary statistics for each regional grouping, 
+# and puts results in list object named "summary_stats_by_region"
+summary_stats_by_region<-describeBy(qog_copy_selection, qog_copy_selection$region)
+
+# Accessing continent-level summary statistics for 
+# The Pacific from the "summary_stats_by_region" list
+summary_stats_by_region[["Pacific"]]
+
+# Generate a table that displays summary statistics for "wdi_trade" # and "wdi_fdiin" at the regional level and assign to object named # "trade_fdi_by_region"
+trade_fdi_by_region<-
+  qog_copy_selection %>% 
+  group_by(region) %>% 
+  summarise(meanTrade=mean(wdi_trade, na.rm=TRUE),
+            sdTrade=sd(wdi_trade, na.rm=TRUE),
+            meanFDI=mean(wdi_fdiin, na.rm=TRUE), 
+            sdFDI=sd(wdi_fdiin, na.rm=TRUE),
+            n=n())
+
+# views "trade_fdi_by_region" in data viewer
+View(trade_fdi_by_region)
+
+# filters South Asia observations and drops countries with "na" values for "wdi_trade"
+qog_south_asia<-qog_copy_selection %>% 
+  filter(region=="SouthAsia") %>% 
+  drop_na(wdi_trade)
+
+
+# Creates a bar chart of the "wdi_trade" variable (central government expenditure as a share of GDP) for the South Asia observations and assigns the plot to an object named "trade_southasia"
+trade_southasia<-
+  ggplot(data=qog_south_asia)+
+  geom_col(aes(x=cname, y=wdi_trade))+
+  labs(
+    title="Trade as a Percentage of GDP in South Asia\n(2017-2020)",
+    caption = "Source: Quality of Government Institute", 
+    x="Country", 
+    y="Trade as a Percentage of GDP")+
+  theme(plot.title=element_text(hjust=0.5),
+        axis.text.x = element_text(angle = 90))
+
+# prints "trade_southasia"
+trade_southasia
+
+# Creates a bar chart of the "wdi_trade" variable
+# for the South Asia observations; countries are on the 
+# x axis and arrayed in ascending order with respect to the 
+# trade variable, which is on the y-axis; assigns the plot to an 
+# object named "trade_southasia_ascending"
+trade_southasia_ascending<-
+  ggplot(qog_south_asia)+
+  geom_col(aes(x=reorder(cname, wdi_trade), y=wdi_trade))+
+  labs(
+    title="Trade as a Percentage of GDP in South Asia\n(2017-2020)",
+    caption = "Source: Quality of Government Institute", 
+    x="Country", 
+    y="Trade as a Percentage of GDP")+
+  theme(plot.title=element_text(hjust=0.5),
+        axis.text.x = element_text(angle = 90))
+
+# prints "trade_southasia_ascending"
+trade_southasia_ascending
+
+# Creates a bar chart of the "wdi_trade" variable for the South Asia observations; countries are on the x axis and arrayed in descending order with respect to the trade variable, which is on the y-axis; assigns the plot to an object named "trade_southasia_descending"
+trade_southasia_descending<-
+  ggplot(qog_south_asia)+
+  geom_col(aes(x=reorder(cname, -wdi_trade), y=wdi_trade))+
+  labs(
+    title="Trade as a Percentage of GDP in South Asia\n(2017-2020)",
+    caption = "Source: Quality of Government Institute", 
+    x="Country", 
+    y="Trade as a Percentage of GDP")+
+  theme(plot.title=element_text(hjust=0.5),
+        axis.text.x = element_text(angle = 90))
+
+# prints "trade_southasia_descending"
+trade_southasia_descending
+
+# creates inverted bar chart of "wdi_trade" for South Asian Countries and assigns to "wdi_trade_inverted"
+wdi_trade_inverted<-trade_southasia_ascending+
+  coord_flip()
+
+# prints "wdi_trade_inverted"
+wdi_trade_inverted
+
+# fixes x axis labels
+wdi_trade_inverted<-wdi_trade_inverted+
+  theme(axis.text.x=element_text(angle=0))
+
+# prints updated "wdi_trade_inverted"
+wdi_trade_inverted
+
+# Creates scatterplot with "wdi_taxrev" variable on x-axis and "wdi_trade" variable on y-axis and assigns to object named "tax_trade_scatter"
+tax_trade_scatter<-
+  ggplot(qog_copy_selection)+
+  geom_point(aes(x=wdi_taxrev, y=wdi_trade))+
+  labs(title="Relationship Between Trade and Tax Revenue as % of GDP\n(2017-2021)",
+       x="Tax Revenue as a % of GDP", 
+       y="Trade as a % of GDP",
+       caption = "Source: Quality of Government Institute")+
+  theme(plot.title=element_text(size=11, hjust=0.5),
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10))
+
+# prints "tax_trade_scatter"
+tax_trade_scatter
+
+# uses color to distinguish between observations from different regions in the scatterplot 
+tax_trade_scatter_color<-
+  ggplot(qog_copy_selection)+
+  geom_point(aes(x=wdi_taxrev, y=wdi_trade, color=region))+
+  labs(title="Relationship Between Trade and Tax Revenue as % of GDP\n(2017-2021)",
+       x="Tax Revenue as a % of GDP", 
+       y="Trade as a % of GDP",
+       caption = "Source: Quality of Government Institute")+
+  theme(plot.title=element_text(size=11, hjust=0.5),
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10))
+
+# prints "tax_trade_scatter_color"
+tax_trade_scatter_color
+
+# uses facets to make panel of different scatter plot ofs "wdi_trade" and "wdi_taxrev" for each region
+tax_trade_scatter_facets<-
+  tax_trade_scatter+
+  facet_wrap(~region, nrow=2)
+
+# prints "tax_trade_scatter_facets"
+tax_trade_scatter_facets
+
+# layers line of best fit over scatterplot; wdi_trade on y axis axis and wdi_taxrev on x axis; assigns new plot to object named 
+"tax_trade_scatter_line"
+tax_trade_scatter_line<-
+  ggplot(data=qog_copy_selection)+
+  geom_point(aes(x=wdi_taxrev, y=wdi_trade))+
+  geom_smooth(aes(x=wdi_taxrev, y=wdi_trade), method="lm")+
+  labs(title="Relationship Between Trade and Tax Revenue as % of GDP\n(2017-2021)",
+       x="Tax Revenue as a % of GDP", 
+       y="Trade as a % of GDP",
+       caption = "Source: Quality of Government Institute")+
+  theme(plot.title=element_text(size=11, hjust=0.5),
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10))
+
+# prints "tax_trade_scatter_line"
+tax_trade_scatter_line
+
+# computes correlation coefficient between "wdi_taxrev" and "wdi_trade" variables and assigns the result to a new object named "trade_cgexp_cc"
+tax_trade_cc<-cor.test(qog_copy_selection$wdi_trade, qog_copy_selection$wdi_taxrev)
+
+# prints results of "tax_trade_cc"
+tax_trade_cc
+
+# assigns well-formatted model output to "trade_cgexp_cc_clean"
+tax_trade_clean_corr<-broom::tidy(tax_trade_cc)
+
+# prints contents of "tax_trade_clean_corr"
+tax_trade_clean_corr
+
+# removes dummy variables from "qog_copy_selection_numeric" 
+# before making correlation matrix
+qog_copy_selection_numeric_continuous<-
+  qog_copy_selection_numeric %>% 
+  dplyr::select(-c(atop_ally, bmr_dem, gol_est))
+
+# creates correlation matrix for observations in 
+# "qog_copy_selection_numeric_continuous" and assigns result 
+# to object named "qog_copy_selection_numeric_cor_matrix"
+qog_copy_selection_numeric_cor_matrix<-round(cor(qog_copy_selection_numeric_continuous, use="complete.obs"), 2)
+
+# prints "qog_copy_selection_numeric_cor_matrix"
+qog_copy_selection_numeric_cor_matrix
+
+# views "qog_copy_selection_numeric_cor_matrix"
+View(qog_copy_selection_numeric_cor_matrix)
+
+# implements bivariate regression with "wdi_trade" as DV and "wdi_taxrev" as IV; regresion output assigned to "regression1" object
+regression1<-lm(wdi_trade~wdi_taxrev, data=qog_copy_selection)
+
+# prints output of "regresion1"
+summary(regression1)
+
+# Implements multiple regression with "wdi_trade" as DV, 
+# and assigns output to object named "regression2"
+regression2<-lm(wdi_trade~+wdi_taxrev+wdi_area+wdi_expmil+bmr_dem+top_top1_income_share+undp_hdi, data=qog_copy_selection)
+
+# prints regression2 output
+summary(regression2)
+
+# Implements multiple regression with "wdi_trade" as DV, and log transform,
+# and assigns output to object named "regression2"
+regression2<-lm(wdi_trade~wdi_taxrev+log(wdi_area)+wdi_expmil+bmr_dem+top_top1_income_share+undp_hdi, data=qog_copy_selection)
+
+# prints updated output
+regression2
+
+# prints regression output using "tidy" function
+broom::tidy(regression2)
+
+# exports "east_asia" to a local directory (i.e. the "outputs" sub-directory of our working directory)
+write_csv(east_asia, "outputs/east_asia.csv")
+
+# create file names for exported World Bank files
+WB_filenames_export<-paste0("outputs/", worldbank_filenames_base, "_cleaned.csv")
+
+# prints "WB_filenames_export" contents
+WB_filenames_export
+
+# exports datasets in "world_bank_list_cleaned" to "outputs" directory using filenames in "WB_filenames_export"
+walk2(.x=world_bank_list_cleaned, .y=WB_filenames_export, write_csv)
+
+# creates list container for regression models
+regression_list<-list(regression1, regression2)
+
+# exports regressions in "regression_list" via stargazer as html
+stargazer(regression_list, type="html", out="outputs/qog_regressions.html")
+
+# exports regressions in "regression_list" via stargazer as text
+stargazer(regression_list, type="text", out="outputs/qog_regressions.txt")
+
+# exports "trade_southasia_ascending" as .png file using "ggsave" function
+ggsave("outputs/trade_southasia_ascending.png", trade_southasia_ascending, width=10, height=5)
+
+# exports "trade_southasia_ascending" as .pdf file using "ggsave" function
+ggsave("outputs/trade_southasia_ascending.pdf", trade_southasia_ascending, width=10, height=5)
+
+# exports multiple visualizations using pdf graphics device
+pdf("outputs/workshop_visualizations.pdf", width=12, height=5)
+trade_southasia_ascending
+tax_trade_scatter_line
+dev.off()
+
+
+
+
+
+
+
+
+
 
 
 
