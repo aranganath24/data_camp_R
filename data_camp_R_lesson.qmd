@@ -1072,3 +1072,922 @@ Write a function that takes a monetary value (in US dollars) as an input, and re
 **Exercise 4b**
 
 Take the function you wrote in the exercise immediately above, and use a function from the *purrr* package to programmatically generate a data frame where one column contains US dollars in the following amounts: 10.25, 1245.55, 83, 76, 11559, and the other column contains the equivalent sum of money in Euros.
+
+# Data Processing and Wrangling
+
+Now that we have a basic understanding of important features of the R language and R programming, we'll turn to a more applied exploration of some real world datasets. Our focus, in particular, is on data processing and wrangling tasks that help prepare datasets for analysis and visualization (which we turn to in the next section).
+
+## Importing data
+
+Typically, you will have your research data stored elsewhere (for example, on your computer, cloud storage, or an online repository), and will have to import this data into your R environment. Here, we will focus on reading in data from a directory on your computer.
+
+After downloading he workshop repository, opening the "data_camp_r.Rproj" file should automatically set your working directory to the workshop repository directory. The working directory is essentially the "active" directory in your file system, and allows you to reference files with respect to this location. Though your working directory has been automatically set via the ".Rproj" file, you can also manually set your working directory by passing the file path (in quotes) to the desired working directory as an argument to the `setwd()` function; you could also set the working directory through the R Studio menu, by clicking **Session**, and then **Set Working Directory**, and then navigating to the desired working directory.
+
+Below, we read in the cross-national "Quality of Government" dataset (stored as a CSV file named "qog_bas_cs_jan25" in the "data" subdirectory's "quality_of_government" folder") by passing the file path as an argument to the `read_csv()` function; we assign the data to a new object named `qog`:
+
+```{r}
+# reads in the workshop dataset by passing the file path as an argument to the "read_csv" function and assigns the resulting data frame to a new object named "qog"
+qog<-read_csv("data/quality_of_government/qog_bas_cs_jan25.csv")
+```
+
+By printing the name of this, we can extract a preview of the dataset, along with some useful metadata:
+
+```{r}
+# prints contents of "qog" object to console
+qog
+```
+
+Recall, also, that we can view data frames in the R Studio data viewer by passing the name of the object to the `View() function:`
+
+Recall, also, that we can view data frames in the R Studio data viewer by passing the name of the object to the `View() function:`
+
+```{r}
+#| eval: false
+# views "qog" in data viewer
+View(qog)
+```
+
+```{r}
+#| echo: false
+#| results: false
+qog_truncated<-qog[, 1:30]
+
+qog_truncated_withna<-qog_truncated %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+
+```
+
+```{r}
+#| echo: false
+reactable(qog_truncated_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+Note that to keep things tractable within this document, the table printed above does not print all of the columns in the dataset, but the full data frame should appear in the Viewer when the corresponding object name is passed to the `View()` function.
+
+Sometimes, you may be working with more than one dataset, in which case it could make sense to iteratively load multiple datasets into memory. In such cases, it is typically useful to read the datasets directly into a list.
+
+Within the "world_bank" subdirectory in the "data" directory, there are four CSV files downloaded from the World Bank's development indicators site:
+
+-   *wdi_debt2019.csv* (country level World Bank data on debt as a share of GDP in 2019)
+
+-   *wdi_fdi2019.csv* (country level World Bank data on foreign direct investment as a share of GDP in 2019)
+
+-   *wdi_trade2019.csv* (country level World Bank data on trade as a share of GDP in 2019)
+
+-   *wdi_urban2019.csv* (country level World Bank data on the urban population as a share of the overall population in 2019).
+
+The first step we must take to iteratively read these files into a list is to make a character vector of the file names we want to read in. The code below uses the `list.files()` function to extract the file names of the files in the "data/world_bank" directory to a character vector, which we'll assign to an object named "worldbank_filenames":
+
+```{r}
+# prints the names of the files we want to read in and assigns the vector of strings to a new object named "worldbank_filenames" 
+worldbank_filenames<-list.files("data/world_bank")
+```
+
+Let's confirm that the file names have been written correctly:
+
+```{r}
+# prints "worldbank_filenames"
+worldbank_filenames
+```
+
+Next, we'll create the filepaths to these files:
+
+```{r}
+# creates world bank file paths and assigns result to "wb_filepaths"
+wb_filepaths<-paste0("data/world_bank/", worldbank_filenames)
+```
+
+Now, we'll use the `map()` function to iteratively pass the file paths in the `wb_filepaths` vector to the `read_csv()` function, and deposit the imported files into a list named `world_bank_list`:
+
+```{r}
+# iteratively passes file names in "wb_filepaths" to the "read_csv" function, and deposits imported world bank files into a list that is assigned to an object named "world_bank_list"; assumes the working directory is the one with the world bank files
+world_bank_list <- map(.x=wb_filepaths, .f=read_csv)
+```
+
+Now, let's go ahead print the contents of `world_bank_list`; it should contain the World Bank datasets as list elements:
+
+```{r}
+# prints contents of "world_bank_list"
+world_bank_list
+```
+
+It could be useful to label the list elements of `world_bank_list`. For labels, it would make sense to use the file names in `worldbank_filenames`, without the ".csv" extension. Below, we use the `str_remove()` function to remove the ".csv" extension from the file names in `worldbank_filenames` and assign the result to a new object named `worldbank_filenames_base`:
+
+```{r}
+# removes CSV extension from "worldbank_filenames"
+worldbank_filenames_base <- str_remove(worldbank_filenames, ".csv")
+```
+
+Now, let's use the `names()` argument to assign the labels in `worldbank_filenames_base` to the elements in `world_bank_list`:
+
+```{r}
+# assigns names to datasets in "world_bank_list"
+names(world_bank_list) <- worldbank_filenames_base
+```
+
+Let's confirm that the list elements are labeled:
+
+```{r}
+# prints "world_bank_list"; note elements are labeled
+world_bank_list
+```
+
+Now that the file names are assigned, we can extract list elements by their labels. Below, for example, we extract the FDI dataset from `world_bank_list` using its label:
+
+```{r}
+# extracts fdi dataset from "world_bank_list" by assigned label
+world_bank_list[["wdi_fdi2019"]]
+```
+
+## Processing and wrangling a single dataset
+
+Once we've read in our dataset(s) of interest, we are ready to carry out the processing and wrangling tasks needed to prepare to data for analysis and visualization. In this section, we'll consider a variety of useful functions (most of them from *tidyverse* packages such as *dplyr*) that can help with common data preparation tasks.
+
+We'll start by making a copy of the `qog` object, by assigning it to a new object named `qog_copy`; we'll work with `qog_copy` instead of the original `qog` object, to ensure that we can always revert to the original data when needed. Keeping a "clean" version of the dataset of interest, and carrying out data processing and analysis tasks on a copy of this dataset, is good data management practice.
+
+```{r}
+# makes a copy of "qog", called "qog_copy" that we can use for processing; keeps the original data frame, "qog" untouched
+qog_copy<-qog
+```
+
+### Introducing the `%>%` (pipe) operator
+
+Before proceeding, we will introduce the `%>%` operator (known as a "pipe"). The pipe helps chain together different functions to form a clear and explicit data processing and analysis pipeline. To illustrate how a pipe works, let's first consider a simple data processing operation that does *not* use a pipe.
+
+In particular, we will use the `select()` function from the *dply*r package to select a few columns from `qog_copy`; this dataset has over 300 variables, so it would make sense to create a more tractable dataset that extracts the specific columns/variables we're interested in. Let's say, for example, that we want to select the "cname_qog", "cname", "ccodealp", "undp_hdi", and "wdi_expedu" variables from `qog_copy`. We can do so by passing the name of the data object containing the columns we want to select, along with the names of the desired columns, as arguments to the `select()` function. Below, we'll select these columns from `qog_copy` and assign the modified data frame to a new object named `qog_copy_select_initial`:
+
+```{r}
+# selects columns/variables from "qog_copy" and assigns the 
+# modified data frame to a new object named "qog_copy_select"
+qog_copy_select_initial <- select(qog_copy, cname_qog, cname, ccodealp, undp_hdi, wdi_expedu)
+```
+
+Let's view `qog_copy_select_initial` in the data viewer:
+
+```{r}
+#| echo: false
+qog_copy_select_initial_withna<-qog_copy_select_initial %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+
+```
+
+```{r}
+#| eval: false
+# Views "qog_copy_select_initial" in the data viewer
+View(qog_copy_select_initial)
+
+```
+
+```{r}
+#| echo: false
+reactable(qog_copy_select_initial_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+Now that we've seen how to use the `select()` function using traditional syntax, let's see how we can carry out the same operation with a pipe operator. In particular, the piping syntax looks something like this:
+
+```{r}
+# selects columns/variables from "qog_copy" using the 
+# pipe syntax and assigns the modified data frame 
+# to a new object named "qog_copy_select"
+qog_copy_select_pipe <- 
+  qog_copy %>% 
+    select(cname_qog, cname, ccodealp, undp_hdi, wdi_expedu)
+```
+
+Note that the pipe operator `%>%` comes immediately after `qog_copy` and immediately before we call the `select()` function. In essence, the pipe operator takes the contents to its left, and then uses these contents as an input to the code on its right. Above, the pipe takes the contents of `qog_copy` on its left, and then feeds this data into the `select()` function on the right, and returns a modified data frame which is assigned to `qog_copy_select_pipe`. We can pass `qog_copy_select_pipe` into the data viewer to confirm that the operation worked as expected:
+
+```{r}
+#| eval: false
+# views "qog_copy_select_pipe" in data viewer
+View(qog_copy_select_pipe)
+```
+
+```{r}
+#| echo: false
+qog_copy_select_pipe_withna<-qog_copy_select_pipe %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(qog_copy_select_pipe_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+We can already see that the pipe makes our code slightly more readable even when performing a simple operation, but the pipe's usefulness for the task of writing concise and readable code becomes even more visible when performing more complex operations that involve several different data processing functions.
+
+For example, let's say that in addition to selecting the columns above, we also want to subset the dataset to include only countries for which the "undp_hdi" variable is higher than 0.8. We can subset datasets based on such conditions using the `filter()` function. Below, we'll take `qog_copy_select_initial` and subset this dataset to meet the `undp_hdi>0.8` condition, and assign the final version of our processed dataset to a new object named `qog_final_processed`:
+
+```{r}
+# subsets "qog_copy_select_initial" using the "filter()" function to include only observations with undp_hdi>0.8, and deposits the modified dataset into a new object named "qog_final_processed"
+qog_final_processed <- filter(qog_copy_select_initial, undp_hdi>0.8)
+```
+
+Now, let's view `qog_final_processed` in the data viewer and confirm that it only includes the selected variables and is appropriately subsetted according to the specified condition:
+
+```{r}
+#| eval: false
+View(qog_final_processed)
+```
+
+```{r}
+#| echo: false
+qog_final_processed_withna<-qog_final_processed %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(qog_final_processed_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+Notice that using conventional notation (i.e. notation without a pipe), we arrived at our final processed dataset in two steps; first, we had to select columns using the `select()` function, and then we had to take the resulting object and call the `filter()` function to subset the data based on the "undp_hdi" variable. This process can by a little clunky, and the pipe operator helps to streamline it, making for more efficient and readable code. In short, when we use pipe (rather than conventional) notation, we can get from `qog_copy` to the final processed dataset with just the following:
+
+```{r}
+# uses pipe notation to select columns and filter according to a condition
+qog_copy %>% 
+  select(cname_qog, cname, ccodealp, undp_hdi, wdi_expedu) %>% 
+  filter(undp_hdi>0.8)
+```
+
+This code takes the `qog_copy` dataset, and then feeds it into the `select()` function; the output of the `select()` function is then fed into the `filter()` function, which then returns a final dataset equivalent to `qog_final_processed`. Given the readability and conciseness of pipe notation, we will use it extensively in our exploration of data processing and wrangling.
+
+Below, we'll explore the `select()` and `filter()` functions (along with other data processing functions) at greater length; our main purpose in this sub-section was to motivate the utility of the `%>%` operator in helping to create complex data processing pipelines with intuitive and readable code.
+
+### Selecting and deleting variables
+
+In this section, we'll explore the `select()` function at greater length, and use it to select some key variables of interest from `qog_copy`; this will allow us to subsequently work with a more tractable dataset.
+
+In particular, let's select the following variables from `qog_copy` (additional information about the variables is available in the [Quality of Government Basic Dataset Codebook](https://www.qogdata.pol.gu.se/data/codebook_bas_jan25.pdf):
+
+-   "cname_qog": Country name as standardized by QoG
+
+-   "cname": Country name based on the ISO standard
+
+-   "ccodealp": 3-digit ISO country code
+
+-   "undp_hdi": Human development index
+
+-   "wdi_expedu": Government expenditure on education as a percentage of GDP
+
+-   "wdi_acel": Percentage of population with access to electricity
+
+-   "wdi_area": Land area in sq km
+
+-   "wdi_taxrev": Tax revenue as a percentage of GDP
+
+-   "wdi_expmil": Military expenditure as a percentage of GDP
+
+-   "wdi_fdiin": Foreign direct investment (FDI) inflows as a share of GDP
+
+-   "wdi_trade": Foreign trade as a percentage of GDP
+
+-   "cbie_index": Central bank independence index
+
+-   "ht_region": World region of the country
+
+-   "wbgi_rle": Rule of law index
+
+-   "bmr_dem": Dichotomous democracy measure
+
+-   "atop_ally": Member of a military alliance
+
+-   "gol_est": Electoral system (majoritarian/proportional/mixed)
+
+-   "mad_gdppc": Real GDP per capita in 2018 (2011 dollars)
+
+-   "mad_gdppc1900": Real GDP per capita in 1900 (2011 dollars)
+
+-   "bci_bci": Bayesian Corruption Indicator
+
+-   "lis_gini": Gini coefficient
+
+-   "top_top1_income_share": Income share of the population's top 1%
+
+-   "wdi_wip": Percentage of lower house or single house parliamentary seats held by women
+
+Below, we select these variables by passing `qog_copy` to the `select()` function via a `%>%`, and then specify the columns we want to select as arguments to the `select()` function; we assign the resulting selection to a new object named `qog_copy_selection`:
+
+```{r}
+# selects specific variables from "qog_copy" and assigns the selection to a new object named "qog_copy_selection"
+qog_copy_selection <- qog_copy %>% 
+                        select(cname_qog, 
+                               cname, 
+                               ccodealp, 
+                               undp_hdi, 
+                               wdi_expedu,
+                               wdi_acel,
+                               wdi_area,
+                               wdi_taxrev,
+                               wdi_expmil,
+                               wdi_fdiin,
+                               wdi_trade,
+                               cbie_index,
+                               ht_region,
+                               wbgi_rle,
+                               bmr_dem,
+                               atop_ally,
+                               gol_est,
+                               mad_gdppc,
+                               mad_gdppc1900,
+                               bci_bci,
+                               lis_gini,
+                               top_top1_income_share,
+                               wdi_wip)
+```
+
+When we view `qog_copy_selection` in the R Studio data viewer, it looks something like this:
+
+```{r}
+#| eval: false
+# Views "qog_copy_selection" in the data viewer
+View(qog_copy_selection)
+```
+
+```{r}
+#| echo: false
+qog_copy_selection_withoutna<-qog_copy_selection %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(qog_copy_selection_withoutna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+Sometimes, it could make more sense to directly delete columns, instead of deciding on which ones to keep or select. For example, the code below deletes the "cname" variable from `qog_copy_selection` by passing it to the `select()` column with a "-" in front of it:
+
+```{r}
+# removes "cname" column from "qog_copy_selection"
+qog_copy_selection %>% select(-cname)
+```
+
+Note that the "cname" column is not permanently deleted since we didn't assign the code back to `qog_copy_selection` (i.e. with `qog_copy_selection <- qog_copy_selection %>% select(-cname).`) We can confirm this by reprinting `qog_copy_selection` and noting that "cname" is still in the data frame:
+
+```{r}
+# prints contents of "qog_copy_selection"; note "cname" not permanently deleted
+qog_copy_selection
+```
+
+If we want to delete multiple columns, we can pass a vector containing the names of the columns to be deleted to the `select()` function, preceded by a minus sign. For example, if we want to delete "cname", "undp_hdi", and "wdi_acel" from `qog_copy_selection` we can do so with the following:
+
+```{r}
+# deletes "cname", "undp_hdi", and "wdi_acel" from "qog_copy_selection"
+qog_copy_selection %>% select(-c(cname, undp_hdi, wdi_acel))
+```
+
+### Rearranging columns
+
+We can change the order of the columns in a dataset using the `relocate()` function. For example, the code below uses the `relocate()` function to shift the "ccdoealp" column to the front of the `qog_copy_selection` data frame:
+
+```{r}
+# moves "ccdoealp" to front of "qog_copy_selection" dataset
+qog_copy_selection %>% relocate(ccodealp)
+```
+
+We can specify more than one argument to the `relocate` function. For example, in the code below, passing the "ccodealp", "wdi_acel", "wdi_expmil", and "wdi_wip" variables/columns to the `relocate()` function will make "ccodealp" the first column, "wdi_acel" the second column, "wdi_expmil" the third column, and "wdi_wip" the fourth column. Below, we specify this order, and assign the result back to `qog_copy_selection`:
+
+```{r}
+# sets the order for the first four columns of "qog_copy_selection" and assigns the result back to "qog_copy_selection"
+qog_copy_selection <- qog_copy_selection %>% 
+                        relocate(ccodealp, wdi_acel, wdi_expmil, wdi_wip)
+```
+
+Now, let's print the contents of "qog_copy_selection" to the console and confirm the change has been made:
+
+```{r}
+# prints contents of updated "qog_copy_selection" object
+qog_copy_selection
+```
+
+### Renaming variables
+
+In order to rename variables, we can use the `rename()` function; the argument to this function takes the form **new_name=old_name**. The code below renames the existing "ccodealp" variable in the `qog_copy_selection` data frame to "iso3" using the `%>%` operator to pass
+
+```{r}
+# renames "ccodealp" variable in "qog_copy_selection" to "iso3"
+qog_copy_selection %>% 
+  rename(iso3=ccodealp)
+```
+
+Note the "ccodealp" variable was changed to "iso3". If we want to change the name of more than one variable, the `rename()` function can take multiple arguments, separated by a comma. For example, the code below changes "undp_hdi" to "hdi" and "wdi_area" to "wdi_area_sqkm":
+
+```{r}
+# renames "undp_hdi" variable to "hdi", and "wdi_area" to "wdi_area_sqkm" in "qog_copy_selection" data frame
+qog_copy_selection %>% 
+  rename(hdi=undp_hdi,
+         wdi_area_sqkm=wdi_area)
+```
+
+### Sorting data
+
+It is often useful to sort a data frame in ascending or descending order with respect to a given variable. The code below sorts the `qog_copy_selection` data frame in ascending order with respect to the "wdi_trade" variable using the `arrange()` function, and then uses the `relocate()` function to move "wdi_trade" towards the front of the dataset, right after the country name and country code variables:
+
+```{r}
+# sorts "qog_copy_selection" data frame in ascending (low to high) order with respect to the "wdi_trade" variable, and then specifies the order of the first few columns
+qog_copy_selection %>% 
+  arrange(wdi_trade) %>% 
+  relocate(cname_qog, cname, ccodealp, wdi_trade)
+                      
+```
+
+If, instead, we want to sort the dataset in *descending* order with respect to the "wdi_trade" variable, we can pass the name of the variable to the `desc()` function within the `arrange()` function, as below:
+
+```{r}
+# sorts "qog_copy_selection" data frame in descending (high to low) order with respect to the "wdi_trade" variable, and then brings the "wdi_trade" variable to the front of the dataset
+qog_copy_selection %>% 
+  arrange(desc(wdi_trade)) %>% 
+  relocate(cname_qog, cname, ccodealp, wdi_trade)
+```
+
+Note that it's also possible to pass several arguments to the arrange function, and thereby sort a dataset with respect to multiple variables; for example, the code below sorts the `qog_copy_selection` dataset by region ("ht_region), and then further sorts it in descending order by "wdi_trade". It assigns the result back to `qog_copy_selection` to effectively "save" these changes to the object:
+
+```{r}
+# arranges the "qog_copy_selection" data frame in ascending order with respect to "ht_region" and then in descending order with respect to "wdi_trade", and then relocates these variables to the front of the dataset; changes are assigned back to "qog_copy_selection" to store these changes
+qog_copy_selection<-qog_copy_selection %>% 
+                      arrange(ht_region, desc(wdi_trade)) %>% 
+                      relocate(cname_qog, cname, ccodealp, ht_region, wdi_trade)
+```
+
+Let's view the updated version of the `qog_copy_selection` in the data viewer:
+
+```{r}
+#| eval: false
+# Views "qog_copy_selection" in the data viewer
+View(qog_copy_selection)
+```
+
+```{r}
+#| echo: false
+qog_copy_selection_withoutnaB<-qog_copy_selection %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(qog_copy_selection_withoutnaB,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+As we can see, sorting the data in this way allows us to quickly note the country in each regional grouping with the highest value on the "trade" variable. Sorting a dataset with respect to more than one variable can be especially useful in certain contexts, particularly in cases where you're dealing with nested data. For example, in a time series dataset, it can be useful to first sort by year, then by months within the year. In a dataset with regional information, it could be helpful to first sort by regional, then by cities within those regional groupings.
+
+### Creating New Variables Based on Existing Variables
+
+Depending on your research question and empirical strategy, it is often useful or necessary to create new variables in your dataset, based on existing variables. The `mutate()` function from the *dplyr* package is particularly useful for this purpose. To see how it works, consider the code below, which uses the `mutate()` function to create a new variable named "mip" (which stands for "men in parliament") that is computed by subtracting the existing "wdi_wip" (percentage of parliamentary seats held by women) variable from 100. For convenience, we'll also move "wdi_wip" and the newly created "mip" variables to the front of the dataset using `relocate()`:
+
+```{r}
+# Creates new variable named "mip" (percentage of men in parliement) that is calculated by substracting the women's share of parliamentary seats ("wdi_wip") from 100 and relocates these variables to the front of the dataset
+qog_copy_selection %>% 
+  mutate(mip=100-wdi_wip) %>% 
+    relocate(cname_qog, cname, ccodealp, wdi_wip, mip)
+```
+
+Note that the argument to the mutate function takes the form **new_variable=old_variable**. It's possible to define more than one new variable at a time using `mutate()`; simply separate the arguments by a comma within the `mutate()` function. For example, the code below creates a new variable ("land_area_sqmiles") that is created based on "wdi_area" (land area in sq km), as well as a new variable ("no_electricity_access") that presents the percentage of the population *without* access to electricity (based on the "wdi_acel" variable that represents the percentage of the population with access to electricity):
+
+```{r}
+# creates "land_area_sqmiles" variable based on "wdi_area" and "no_electricity_access" variable based on "wdi_acel"
+qog_copy_selection %>% 
+  mutate(land_area_sqmiles=wdi_area/2.5899,
+         no_electricity_access=100-wdi_acel) %>% 
+    relocate(cname_qog, 
+             cname, 
+             ccodealp, 
+             land_area_sqmiles, 
+             wdi_area, 
+             no_electricity_access, 
+             wdi_acel)
+```
+
+The `mutate()` function is particularly handy when we want to transform continuous numeric variables into a dichotomous (i.e. a "dummy" variable that takes on a value of 1 if a condition is met and 0 otherwise) or categorical variable. For example, let's say we want to create a new variable, named "trade_open" that takes on the value of 1 if the "wdi_trade" variable is greater than or equal to 60, and 0 otherwise. We can generate this new dummy variable using the `mutate()` function. In particular, within the `mutate()` function below, we specify that we want to create a new variable named "trade_open"; the `ifelse()` function specifies the desired condition (trade\>=60), followed by the value the new "trade_open" variable is to take if the condition is met (1), and the value the new "trade_open" variable is to take if the condition is not met (0). In other words, we can translate `ifelse(wdi_trade>=77, 1, 0)` to "if wdi_trade\>=60, set the 'trade_open' variable to 1, otherwise set it to 0." We'll assign the data frame with the new "trade_open" variable back to "qog_copy_selection":
+
+```{r}
+# Creates a new dummy variable based on the existing "wdi_trade" variable named "trade_open" (which takes on a value of "1" if "trade" is greater than or equal to 60, and 0 otherwise) and then moves the newly created variables to the front of the datasetall changes are assigned to "qog_copy_selection", thereby overwriting the existing version of "qog_copy_selection"
+
+qog_copy_selection<-
+  qog_copy_selection %>% 
+    mutate(trade_open=ifelse(wdi_trade>=60, 1, 0)) %>% 
+      relocate(cname_qog, cname, ccodealp, wdi_trade, trade_open)
+```
+
+Let's print the updated contents of `qog_copy_selection` to see that the changes have been made:
+
+```{r}
+# prints updated contents of "qog_copy_selection"
+qog_copy_selection
+```
+
+It can also be useful to create categorical variables based on numeric thresholds from an existing variable. For instance, let's say we want to take the existing "wdi_trade" variable, and define a new variable named "trade_level", which is set to "Low_Trade" when the "trade" variable is greater than 15 and less than 50; "Intermediate_Trade" when the "trade" variable is greater than or equal to 50 and less than 100; and "High_Trade" when the "trade" variable is greater than or equal to 100. The code below creates this new "trade_level" variable using the `mutate()` function; within `mutate()` the `case_when()` function maps the conditions onto the desired variable values for "trade_level" using the following syntax:
+
+```{r}
+# Creates a new variable in the "pt_copy" dataset named "trade_level" (that is coded as "Low_Trade" when the "wdi_trade" variable is greater than 15 and less than 50, coded as "Intermediate_Trade" when "wdi_trade" is greater than or equal to 50 and less than 100, and coded as "High_Trade" when "wdi_trade" is greater than or equal to 100), and then reorders the dataset to move "trade_level" and "wdi_trade" to the front of the dataset; the changes are assigned back to "qog_copy_selection"
+qog_copy_selection<-
+  qog_copy_selection %>% 
+  mutate(trade_level=case_when(wdi_trade>15 & wdi_trade<50~"Low_Trade",
+                              wdi_trade>=50 & wdi_trade<100~"Intermediate_Trade",
+                              wdi_trade>=100~"High_Trade")) %>% 
+                    relocate(cname_qog, cname, ccodealp, wdi_trade, trade_level)
+```
+
+Let's print the contents of the updated `qog_copy_selection` data frame and confirm that the changes have been made:
+
+```{r}
+# prints updated contents of "qog_copy_selection"
+qog_copy_selection
+```
+
+Another useful operation is to create dummy variables based on a categorical variable. For example, consider the "trade_level" variable we just created. Let's say we want to use the "trade_level" column to create dummy variables for each of the categories in that column. We can do so with the *fastDummies* package, which can quickly generate dummy variables for the categories in a categorical variable using the `dummy_cols()` function. Below, we simply take the existing `qog_copy_selection` dataset, and pass the name of the categorical variable out of which we want to create the dummies ("trade_level") to the `dummy_cols()` function:
+
+```{r}
+# Creates dummy variables from "trade_level" column, and relocates the new dummies to the front of the dataset; assigns changes back to "qog_copy_selection"
+qog_copy_selection<-
+  qog_copy_selection %>% 
+  dummy_cols("trade_level") %>% 
+    relocate(cname_qog, 
+             cname,
+             ccodealp,
+             trade_level, 
+             trade_level_High_Trade, 
+             trade_level_Intermediate_Trade, 
+             trade_level_Low_Trade, 
+             trade_level_NA)
+```
+
+You'll notice that there are now dummy variables corresponding to each of the categories in the categorical "trade_level" variable; for example, the "trade_level_High_Trade" dummy variable takes on the value of 1 for all observations where the "trade_level" variable is "High_Trade" and 0 otherwise; the "trade_level_Intermediate_Trade" dummy variable takes on the value of 1 for all observations where the "trade_level" variable is "Intermediate_Trade" and 0 otherwise; and so on. If we were to incorporate these dummy variables into a regression model, we would exclude one set of dummy variables (which would then serve as the reference category).
+
+Let's view the updated version of `qog_copy_selection` in the data viewer to see our newly created variables. First, we'll bring the variables of interest to the front of the data frame:
+
+```{r}
+# specifies variable order
+qog_copy_selection<-
+  qog_copy_selection %>% 
+    relocate(cname_qog, 
+             cname, 
+             ccodealp, 
+             wdi_trade, 
+             trade_open, 
+             trade_level, 
+             trade_level_High_Trade,
+             trade_level_Intermediate_Trade, 
+             trade_level_Low_Trade, 
+             trade_level_NA)
+```
+
+Let's now view the modified data frame and note the new variables:
+
+```{r}
+#| eval: false
+# Views "qog_copy_selection" in the data viewer
+View(qog_copy_selection)
+```
+
+```{r}
+#| echo: false
+qog_copy_selection_categorical<-qog_copy_selection %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(qog_copy_selection_categorical,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+### Subsetting (Filtering) Variables
+
+We already introduced the `filter()` function in an earlier section, in the context of our discussion of the `%>%` operator. We'll now briefly return to this function, and provide additional examples of how it can be used to subset our data frames.
+
+Let's say that we want to subset the `qog_copy_selection` data frame to extract only countries part of the South-East Asia region (coded as a "7" in the "ht_region" variable), and assign this South-East Asia data frame to its own object, named `se_asia_data`. We can do so with the following:
+
+```{r}
+# uses the filter() function to extract South East Asia observations from "qog_copy_selection" and assigns the result to a new object named "se_asia_data"
+se_asia_data<-qog_copy_selection %>% 
+                filter(ht_region==7)
+```
+
+Let's print out the contents of `se_asia_data` to see if it worked as expected:
+
+```{r}
+# prints "se_asia_data" to console
+se_asia_data
+```
+
+We can also chain together multiple conditions. For example, let's use the `filter()` condition to extract observations for countries that are part of the "Sub-Saharan Africa" region, and have a Human Development Index ("und_hdi") score greater than or equal to 0.65. We can do so by setting up an expression that uses the "&" logical operator:
+
+```{r}
+# subsets data to include Sub-Saharan African countries with a "undp_hdi" value greater than or equal to 0.65 and assigns the result to an object named "sub_saharan_africa_hdi"
+sub_saharan_africa_hdi<-qog_copy_selection %>% 
+                          filter(ht_region==4 & undp_hdi>=0.65)
+```
+
+Let's print out the contents of `sub_saharan_africa_hdi`:
+
+```{r}
+# prints "sub_saharan_africa_hdi"
+sub_saharan_africa_hdi
+```
+
+We can also subset datasets using non-numeric data. For example, if we wanted to extract all of the observations from `sub_saharan_africa_hdi` for which the "trade_level" variable we created earlier is "Intermediate_Trade", we can do the following:
+
+```{r}
+# Filters observations from "sub_saharan_africa_hdi" for which the "trade_level" variable is set to "Intermediate_Trade"
+sub_saharan_africa_hdi %>% 
+  filter(trade_level=="Intermediate_Trade")
+```
+
+We can also extract observations that do NOT meet a given condition. In particular, the condition "not equal to" is denoted by a "!=". For example, an operation equivalent to the one immediately above would be to exclude observations for which "trade_level" is set to "High_Trade":
+
+```{r}
+# filters observations from "sub_saharan_africa_hdi" for which the "trade_level" variable is NOT set to "High_Trade"
+sub_saharan_africa_hdi %>% 
+  filter(trade_level != "High_Trade")
+```
+
+It can also be useful to filter data using "or" conditions; we can make such statements within the `filter()` function using a "\|". For example, the code below creates a new "east_asia" dataset by using the `filter()` function to extract South-East Asia or East Asia observations from `qog_copy_selection` :
+
+```{r}
+# uses the "filter()" function to extract observations from South-East Asia (ht_region=7) or East Asia (ht_region=6) and assigns the result to a new object named "east_asia"
+east_asia<-qog_copy_selection %>% 
+              filter(ht_region==6|ht_region==7) %>% 
+                relocate(cname_qog, cname, ccodealp, ht_region)
+```
+
+Now, let's print the contents of the newly created `east_asia` object:
+
+```{r}
+# prints contents of "east_asia"
+east_asia
+```
+
+## Wrangling and processing multiple datasets
+
+In many cases, the data for a research project is distributed across several locations; this sub-section covers important tools and functions that facilitate the wrangling and processing of multiple datasets. Often, the goal is to bring data across multiple locations into a single dataset, where it can be more easily explored and analyzed. Other times, however, the goal is not necessarily to consolidate multiple datasets into a single dataset, but to work with multiple datasets as efficiently and systematically as possible.
+
+### Joining Data
+
+Joining, or merging, distinct datasets into a single dataset based on a common variable that exists in both individual datasets is an essential operation in most research projects. To see how we can implement joins in R using the `join()` family of functions, let's first pull out two of the list elements in `world_bank_list` and assign them to objects in the global environment. First, we'll extract the dataset on foreign direct investment, and assign it to an object named `wdi_fdi`:
+
+```{r}
+# extracts fdi dataset from "world_bank_list" by assigned name and assigns it to a new object named "wdi_fdi"
+wdi_fdi<-world_bank_list[["wdi_fdi2019"]]
+```
+
+Then, we'll extract the World Bank trade dataset and assign it to an object named `wdi_trade`:
+
+```{r}
+# extracts debt dataset from "world_bank_list" by assigned name and assigns it to a new object named "wdi_trade"
+wdi_trade<-world_bank_list[["wdi_trade2019"]]
+```
+
+Then, we'll clean up these datasets by dropping rows with NA values, and then renaming the awkwardly named "2019 \[YR2019'" variables in each of the datasets to something more intuitive and descriptive:
+
+```{r}
+# drop na's and rename variable in in trade dataset and assign to "wdi_trade_cleaned"
+wdi_trade_cleaned<-wdi_trade %>%
+            drop_na() %>% 
+            rename(trade_2019=`2019 [YR2019]`)
+
+# drop na's and rename variable in in FDI dataset and assign to "wdi_fdi_cleaned"
+wdi_fdi_cleaned<-wdi_fdi %>% 
+            drop_na() %>% 
+            rename(fdi_2019=`2019 [YR2019]`)
+```
+
+Now, we can go ahead and use a `join()` function, to merge the datasets together. There are several different versions of the `join()` function, and you should read the documentation to learn more, and make sure you're applying the correct function given the context of your research (`?join`).
+
+We will use the `full_join()` function, which keeps all of the observations from each of the component datasets in the joined (i.e. output) dataset (even those that do not have a corresponding observation in the other dataset). Below, we call the `full_join()` function, and pass as arguments the two datasets we'd like to join. The specification `by="Country Code"` indicates that the join field (i.e. the common field that can be used to link the data frames) is the "Country Code" variable. The column containing the country codes is named "Country Code" in both columns, which makes this especially easy; if, however, the columns containing the join variable were named differently, we could equate them within the `full_join()` function by passing a vector to the "by" argument that specifies the join field from each component dataset. For example, if the country code variable was in a column named "iso3" in `wdi_fdi` and "Country Code" in `wdi_trade`, we could specify `by=c("iso3"="Country Code")` to let the function know that the join field in `wdi_fdi` is "iso3" and the join field in `wdi_trade` is "Country Code". Below, we assign the product of the join to a new object named `fdi_trade_join`:
+
+```{r}
+# join together "wdi_fdi_cleaned" and "wdi_fdi_cleaned" using country code
+fdi_trade_join<-full_join(wdi_fdi_cleaned, wdi_trade_cleaned, by="Country Code")
+```
+
+Let's see what `fdi_trade_join` looks like by passing it to the R Studio Viewer:
+
+```{r}
+#| eval: false
+View(fdi_trade_join)
+```
+
+```{r}
+#| echo: false
+fdi_trade_join_withna<-fdi_trade_join %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(fdi_trade_join_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+Note that both variables are now in the dataset as separate columns.
+
+### Appending Data
+
+If joining datasets is fundamentally about situating disparate datasets side-by-side in a new unified dataset, appending datasets is about stacking disparate datasets with a similar structure on top of each other in a new unified dataset. In other words, joining datasets leads to a unified dataset with more columns than the original individual datasets, while appending datasets leads to a unified dataset with more rows than the original individual datasets. Depending on the type of data you're working with, appending data can be just as important a method for bringing together disparate datasets.
+
+We can easily append data frames a single unified data frame using the `bind_rows()` function from *dplyr*. Below, we append `wdi_fdi`to `wdi_trade` by passing these objects as arguments to the `bind_rows()` function. We'll assign the appended dataset to a new object named `worldbank_trade_fdi_appended`:
+
+```{r}
+# Appends "worldbank_trade_2019" to "worldbank_fdi_2019" and assigns new dataset to object named "worldbank_trade_fdi"
+worldbank_trade_fdi_appended<-bind_rows(wdi_trade, wdi_fdi)
+```
+
+To confirm that the appending operation worked as expected, please view `worldbank_trade_fdi_appended` in the data viewer.
+
+### Reshaping Data
+
+In a "wide" dataset, each variable or measurement is stored in a separate column; on the other hand, in a "long" dataset, each measurement is stored in a single column, and there is an additional column that identifies the specific variable or category for each observation. For example, in our context, `fdi_trade_join` is a "wide" dataset, while `worldbank_trade_fdi_appended` is formatted as a long dataset.
+
+The process of converting a wide dataset to a long one, or vice versa, is typically referred to as reshaping data. Often, one will need to bring different datasets together (either through a join or append operation), but in order to successfully implement the required procedure, it is first necessary to reshape at least one of the datasets so that they're correctly formatted; the first step in integrating datasets, therefore, is frequently a reshaping operation that ensures that the datasets have a common structure. Below, we'll quickly review some functions for carrying out these reshaping operations from the *tidyr* package, which is part of the *tidyverse* suite.
+
+#### Long to Wide
+
+To see how a "long to wide" operation works using the *tidyr* lets imagine we want to transform `worldbank_trade_fdi_appended`, currently formatted as a long dataset, into a wide dataset. First we'll clean up `worldbank_trade_fdi_appended` using some familiar *tidyverse* functions, and assign the result to a new object named `worldbank_trade_fdi_cleaned` cleaned:
+
+```{r}
+# cleans the dataset before reshaping
+worldbank_trade_fdi_cleaned<-worldbank_trade_fdi_appended %>% 
+                              rename(economic_variables="2019 [YR2019]",
+                                     series_code="Series Code") %>% 
+                              select(-"Series Name") %>% 
+                              drop_na()
+                      
+                                      
+```
+
+Before proceeding, we should note that the column containing the data, "economic_variables" is formatted as a character variable:
+
+```{r}
+# prints class of "economic_variables" column
+class(worldbank_trade_fdi_cleaned$economic_variables)
+```
+
+In order for the reshaping process to work, we need to transform that column into the "numeric" class, which we do with the following:
+
+```{r}
+# converts "economic_variables" to numeric
+worldbank_trade_fdi_cleaned$economic_variables<-as.numeric(worldbank_trade_fdi_cleaned$economic_variables)
+```
+
+Now, we use *tidyr*'s `pivote_wider` function to "pivot" the data from long to wide. Below, we'll take `worldbank_trade_fdi_cleaned` and then feed that data into the `pivot_wider()` function using the %\>% operator. Within the `pivot_wider()` function, the "names_from" argument specifies the current column that contains the names we would like to use as column names in the reshaped dataset, while the "values_from" argument specifies the name of the current column that contains the data that will be used to populate the columns in the reshaped dataset. We'll assign this code to a new object named `worldbank_trade_fdi_wide`:
+
+```{r}
+# reshapes "worldbank_trade_fdi_cleaned" from long to wide and assigns the wide dataset to an object named "worldbank_trade_fdi_wide"
+worldbank_trade_fdi_wide<-worldbank_trade_fdi_cleaned %>% 
+                              tidyr:: pivot_wider(names_from=series_code,
+                                          values_from=economic_variables)
+```
+
+Let's quickly take a look at the reshaped dataset:
+
+```{r}
+#| eval: false
+# prints contents of "worldbank_trade_fdi_wide"
+worldbank_trade_fdi_wide
+```
+
+```{r}
+#| echo: false
+head(worldbank_trade_fdi_wide)
+```
+
+It might be nice to rename the variables to something more intuitive:
+
+```{r}
+# renames columns in "worldbank_trade_fdi_wide"
+worldbank_trade_fdi_wide<-worldbank_trade_fdi_wide %>% 
+                          rename(trade2019=NE.TRD.GNFS.ZS,
+                                 FDI2019=BX.KLT.DINV.WD.GD.ZS)
+```
+
+Go ahead and inspect `worldbank_trade_fdi_wide` in the data viewer:
+
+```{r}
+#| eval: false
+View(worldbank_trade_fdi_wide)
+```
+
+```{r}
+#| echo: false
+worldbank_trade_fdi_wide_withna<-worldbank_trade_fdi_wide %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(worldbank_trade_fdi_wide_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+#### Wide to Long
+
+To make the conversion in the opposite direction, i.e. reshaping a dataset from wide to long, we can use the `pivot_longer()` function. Below, we take the `worldbank_trade_fdi_wide` data frame, and feed it into the `pivot_longer()` function using the `%>%` operator. Within the function, we use `cols=c(FDI2019, trade2019)` to specify the current columns that we're going to collapse into a single column in the new dataset. The "names_to" argument specifies the name of column that will hold the original "FDI2019" and "trade2019" columns, while the "values_to" argument specifies the name of the column that will actually hold the data. Let's go ahead and run the code, and assign the output to a new object named `world_bank_trade_long`:
+
+```{r}
+# reshapes "worldbank_trade_fdi_wide" back to long format and assigns the reshaped dataset to a new object named "world_bank_trade_long"
+world_bank_trade_long<-worldbank_trade_fdi_wide %>% 
+                        pivot_longer(cols=c(FDI2019, trade2019),
+                                     names_to="economic_variable",
+                                     values_to = "2019")
+                        
+```
+
+Let's view `world_bank_trade_long` in the data Viewer to confirm that it has been successfully reshaped:
+
+```{r}
+#| eval: false
+View(world_bank_trade_long)
+```
+
+```{r}
+#| echo: false
+world_bank_trade_long_withna<-world_bank_trade_long %>% 
+  mutate(across(everything(), ~ replace_na(as.character(.x), "NA")))
+```
+
+```{r}
+#| echo: false
+reactable(world_bank_trade_long_withna,
+          searchable=FALSE,
+          filterable=FALSE,
+          bordered=TRUE,
+          striped=TRUE)
+```
+
+### Automating Data Processing with Functions
+
+When working with multiple datasets, we may need to carry out identical operations on those datasets, in which case we could save time by wrapping up the relevant code in a function and iterating over the dataset elements we'd like to transform. Let's say, for example, that we want to clean up our World Bank dataset by deleting a column, renaming others, and removing the rows where the country code is NA. Rather than carrying out these operations individually, let's create a function, called `worldbank_cleaning_function`, that implements these changes and returns a clean dataset:
+
+```{r}
+# write function to clean World Bank dataset
+worldbank_cleaning_function<-function(input_dataset){
+  modified_dataset<-input_dataset %>% 
+                      select(-"Series Code") %>% 
+                      rename("Country"="Country Name",
+                             "CountryCode"="Country Code",
+                             "Series"="Series Name",
+                             "2019"="2019 [YR2019]") %>% 
+                      drop_na(CountryCode)
+  return(modified_dataset)
+}
+```
+
+Let's test the function using `wdi_trade`:
+
+```{r}
+#| eval: true
+# passes "wdi_trade" to "worldbank_cleaning_function"
+worldbank_cleaning_function(wdi_trade)
+```
+
+That looked like it worked, so lets go ahead and apply `worldbank_cleaning_function` to all of the data frames in `world_bank_list`. We'll use the familiar `map()` function to do so; below, `world_bank_list` is the list we're iterating over, while `worldbank_cleaning_function()` is the function we're applying:
+
+```{r}
+# Iteratively apply the datasets in "world_bank_list" as input arguments to "worldbank_cleaning_function" and deposit the cleaned datasets into a new list named "world_bank_list_cleaned"
+world_bank_list_cleaned<-map(.x=world_bank_list, .f=worldbank_cleaning_function)
+```
+
+Let's print out the list and confirm that the operation worked:
+
+```{r}
+# prints contents of "world_bank_list_cleaned"
+world_bank_list_cleaned
+```
+
+As expected, each of the processed datasets is an element in `world_bank_list_cleaned`.
+
+# Exploring and Analyzing Data
+
+In this session, we'll turn from tasks related to data processing and wrangling to creating basic visualization and analysis products in R. We will cover descriptive statistics, data visualization using the *ggplot2* package (part of the *tidyverse* suite), and linear regression, and also explore how to export analysis and visualization objects related to such tasks (i.e. plots, regression and summary statistics tables etc.) out of R for use in external applications. Our focus will be on practical issues related to implementing analysis workflows in R, rather than conceptual or methodological issues related to visualization or statistical techniques (which is beyond our current scope).
