@@ -109,6 +109,7 @@ install.packages("fastDummies")
 install.packages("psych")
 install.packages("stargazer")
 install.packages("janitor")
+install.packages("gt")
 ```
 
 If you would like a more efficient way to install packages, we can pass the package names as a vector to the `install.packages()` function. Vectors, which we will discuss further below, are created using the `c()` function (the "c" stands for "combine"):
@@ -116,7 +117,7 @@ If you would like a more efficient way to install packages, we can pass the pack
 ```{r}
 #| eval: false
 # installs workshop packages by passing a vector of package names # to the "install.packages()" function
-install.packages(c("tidyverse", "fastDummies", "psych", "stargazer", "janitor"))
+install.packages(c("tidyverse", "fastDummies", "psych", "stargazer", "janitor", "gt"))
 ```
 
 At this point, the packages should be installed on your computers, but the packages are not yet ready for use. Before we can use our packages, we must load them into our current R environment. The process of loading installed packages into a current R environment is akin to opening up an application on your phone or computer after it has been installed. That is, even after an application has been installed, you can't use it until you open it. To load (i.e. "open") an R package, we pass the name of the package(s) we want to load as an argument to the `library()` function. Below, we load the packages we have installed into memory:
@@ -129,6 +130,7 @@ library(fastDummies)
 library(psych)
 library(stargazer)
 library(janitor)
+library(gt)
 ```
 
 At this point, these packages are loaded into memory and available for us to use. One important thing to note regarding the installation and loading of packages is that we typically only have to install packages once; after a package is installed, there is usually no need to subsequently reinstall it, so long as you don't make major changes to your R or R Studio applications. However, we must load the packages we need (using the `library()` function) every time we open a new R session. In other words, if we were to close RStudio at this point and open it up later, we would **not** need to install these packages again, but **would** need to load them into memory using the `library()` function again.
@@ -2893,6 +2895,52 @@ Or as a text file, as in this case:
 stargazer(regression_list, type="text", out="outputs/qog_regressions.html")
 ```
 
+## Exporting summary statistics tables
+
+The *stargazer* package also offers a convenient way to export a table of summary statistics. For example, the following exports the summary statistics for `qog_copy_selection_numeric` as a text file via `stargazer()`
+
+```{r}
+#| results: hide
+# exports summary stats table as a text file with stargazer
+stargazer(as.data.frame(qog_copy_selection_numeric), type="text", title="Descriptive Statistics", digits=1, out="outputs/summary_stats.txt")
+```
+
+If, instead, we want to export summary statistics as an html file, we can use the following:
+
+```{r}
+#| message: false
+#| results: hide
+# exports summary stats table as a text file with stargazer
+stargazer(as.data.frame(qog_copy_selection_numeric), type="html", title="Descriptive Statistics", digits=1, out="outputs/summary_stats.html")
+```
+
+If we want to export a summary statistics table generated with `describe()` from the *psych* package, we can do so as a CSV file. For example, the code below exports `qog_copy_selection_numeric_summarystats2` as a CSV file. Before exporting, we'll convert the row names to an explicit columns, and then select a few columns of interest:
+
+```{r}
+# exports "qog_copy_selection_numeric_summarystats2" as CSV file after converting rownames to columns and selecting desired summary statistics for final output
+qog_copy_selection_numeric_summarystats2 %>% 
+  rownames_to_column(var="variable") %>% 
+  dplyr::select(variable, n, mean, sd, min, max) %>% 
+  write_csv("outputs/qog_numeric_summarystats2.csv")
+```
+
+If, instead, we want to export `qog_copy_selection_numeric_summarystats2` as a pdf file instead, we can use the `gt()` and `gtsave()` functions from the *gt* package. Note that this package defaults to scientific notation, so we use `fmt_number()` to specify the use of standard notation where numbers are rounded to two decimal places (except the "n" column, which are printed as integers):
+
+```{r}
+# exports "qog_copy_selection_numeric_summarystats2" as PDF table after converting rownames to columns, selecting desired summary statistics, and turning off scientific notation
+qog_copy_selection_numeric_summarystats2 %>% 
+  rownames_to_column(var="variable") %>% 
+  dplyr::select(variable, n, mean, sd, min, max) %>% 
+  gt() %>% 
+  fmt_number(
+    columns = n,
+    decimals = 0) %>% 
+  fmt_number(
+    columns = c(mean, sd, min, max),
+    decimals = 2) %>% 
+  gtsave("outputs/qog_numeric_summarystats2.pdf")
+```
+
 ## Exporting visualizations
 
 We can use the `ggsave()` function to export *ggplot2* visualizations out of R in a variety of file formats. For example, let's say we want to export `trade_southasia_ascending` as a .png file:
@@ -2914,6 +2962,9 @@ ggsave("outputs/trade_southasia_ascending.pdf", trade_southasia_ascending, width
 f you have several visualizations that you want to save in a single file, you can use a graphics device. Below, we use a PDF graphics device to create a single PDF file (named “workshop_visualizations.pdf”) that contains the `trade_southasia_ascending` and the `tax_trade_scatter_line` visualizations. We begin by calling the graphics device, and specifying the name and path of the desired output file, along with the dimensions. Then, we print the name of the visualizations to export, followed by `dev.off()` to turn off the device after the file has been exported.
 
 ```{r}
+#| results: hide
+#| message: false
+#| warning: false 
 # exports multiple visualizations using pdf graphics device
 pdf("outputs/workshop_visualizations.pdf", width=12, height=5)
 trade_southasia_ascending
@@ -2921,4 +2972,16 @@ tax_trade_scatter_line
 dev.off()
 ```
 
-If you want to iteratively export multiple visualizations as separate files, you can put the objects you want to export in a list, and export them using the `walk()` function in conjunction with `ggsave()` (similar to what we did above, when exporting multiple CSV files).
+If you want to iteratively export multiple visualizations as separate files, we can put the objects we want to export in a list, and export them using the `walk()` function in conjunction with `ggsave()` (similar to what we did above, when exporting multiple CSV files). Below, we export `trade_southasia_ascending` and `tax_trade_scatter_line` as separate **.png** files to the outputs folder in our working directory.
+
+```{r}
+# creates list to hold visualization objects with inline labeling
+viz_list<-list("trade_southasia_ascending"=trade_southasia_ascending, "tax_trade_scatter_line"= tax_trade_scatter_line)
+
+# create file names
+viz_filenames<-paste0("outputs/", names(viz_list), ".png")
+
+# export files
+walk2(.x=viz_filenames, .y=viz_list, .f=ggsave, width=12, height=5)
+
+```
