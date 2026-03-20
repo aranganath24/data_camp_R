@@ -2884,6 +2884,7 @@ regression_list<-list(regression1, regression2)
 Then, we can pass the list as an argument to the `stargazer()` function, which will either export it to the specified directory as an html file, as in this case:
 
 ```{r}
+#| results: false
 # exports regressions in "regression_list" via stargazer as html
 stargazer(regression_list, type="html", out="outputs/qog_regressions.html")
 ```
@@ -2891,8 +2892,9 @@ stargazer(regression_list, type="html", out="outputs/qog_regressions.html")
 Or as a text file, as in this case:
 
 ```{r}
+#| results: false
 # exports regressions in "regression_list" via stargazer as text
-stargazer(regression_list, type="text", out="outputs/qog_regressions.html")
+stargazer(regression_list, type="text", out="outputs/qog_regressions.txt")
 ```
 
 ## Exporting summary statistics tables
